@@ -72,7 +72,7 @@ point multiplicationMatricePoint(matrice m1, point p2){
 
 
 //Genere la matrice de translation en fonction des x,y,z donnés
-matrice genereT(float x,float y){
+matrice genereT(float x,float y, float z){
   matrice m;
   m = initialiserMatriceAvec1();
   m[0][0] = 1;
@@ -85,7 +85,7 @@ matrice genereT(float x,float y){
 }
 
 //Genere la matrice de mise a l'echelle en fonction de x,y,z 
-matrice genereS(float x, float y, matrice m){
+matrice genereS(float x, float y, float z){
   matrice m;
   m = initialiserMatriceAvec1();
   m[0][0] = x;

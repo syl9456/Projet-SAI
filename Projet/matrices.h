@@ -1,6 +1,8 @@
 #ifndef _Matrices_h
 #define _Matrices_h
 
+#include "setup.h"
+
 //Taille de la matrice
 #define TAILLE_MATRICE 4
 
@@ -18,8 +20,10 @@ matrice initialiserMatriceAvec1();
 matrice initialiseMatriceDeSommetAvec1(sommet s);
 matrice genereS(float x, float y, float z);
 matrice genereT(float x,float y, float z);
-matrice genereR(point pO, float a);
+matrice genereRAutourY();
 matrice multiplicationMatrice(matrice m1, matrice m2);
-point multiplicationMatricePoint(matrice m, point p);
+point multiplicationMatricePoint(matrice m1, point p2);
+void afficheMatrice(matrice m);
+void affichePoint(point p);
 
 #endif

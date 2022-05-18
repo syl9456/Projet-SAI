@@ -1,6 +1,7 @@
 #include "affichage.h"
 
 
+
 //Trace un plan sur la fenetre
 void trace_Plan(plan p, couleur c){
 	glBegin(GL_QUADS);
@@ -13,6 +14,7 @@ void trace_Plan(plan p, couleur c){
 }
 
 
+
 //Trace un triangle sur la fenetre
 void trace_Triangle(triangle t, couleur c){
 	glBegin(GL_TRIANGLES);
@@ -22,6 +24,7 @@ void trace_Triangle(triangle t, couleur c){
 	glVertex3f(t.s3.x, t.s3.y, t.s3.z);
 	glEnd();
 }
+
 
 
 //Trace la plateforme sur la fenetre
@@ -39,6 +42,7 @@ void trace_Plateforme(plateforme plat){
 		trace_Plan(plat.plans[i], c);
 	}
 }
+
 
 
 //Trace la maison sur la fenetre
@@ -63,6 +67,7 @@ void trace_Maison(maison mais){
 		trace_Triangle(mais.triangles[i], c);
 	}
 }
+
 
 
 //Trace trois lignes pour visualiser l'origine 0,0,0 de la fenetre Et voir si nos formes se mettent bien au milieu tahu

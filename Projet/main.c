@@ -1,6 +1,7 @@
 #include "setup.h"
 #include "init.h"
 #include "affichage.h"
+#include "mouvementsFormes.h"
 
 //Variables pour l'animations et le Frustrum()/gluLookAt()
 float angle = 0;

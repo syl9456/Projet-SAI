@@ -1,6 +1,9 @@
-#include "mouvements.h"
+#include "mouvementsFormes.h"
 
 
+
+
+//A faire avec les matrices gnagna
 void translation_plateforme(plateforme p){
 	
 } 
