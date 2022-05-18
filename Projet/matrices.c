@@ -6,7 +6,7 @@
 
 
 //Initialise la matrice avec que des zeros et un 1 en bas
-matrice initialiserMatriceAvec1(){
+void initialiserMatriceAvec1(matrice m){
   int i,j;
   matrice m;
   for(i = 0; i<TAILLE_MATRICE; i++){
@@ -15,12 +15,11 @@ matrice initialiserMatriceAvec1(){
     }
   }
   m[3][3] = 1.0;
-  return m;
 }
 
 
 //Initialise une matrice avec que des 0
-matrice initialiserMatrice(){
+void initialiserMatrice(matrice m){
   matrice m;
   int i,j;
   for(i = 0; i<TAILLE_MATRICE; i++){
@@ -44,7 +43,7 @@ point initialiserMatriceDeSommetAvec1(sommet s){
 
 
 //Application d'une multiplication de matrices renvoie une matrice resultat
-matrice multiplicationMatrice(matrice m1, matrice m2){
+void multiplicationMatrice(matrice m1, matrice m2, matrice m3){
   int i,j,k;
   matrice m3;
   for(i = 0; i < TAILLE_MATRICE ; i++){
@@ -54,10 +53,9 @@ matrice multiplicationMatrice(matrice m1, matrice m2){
       }
     }
   }
-  return m3;
 }
 
-
+/* Ne pas utiliser point en retour de fct
 //Application d'une matrice de déplacement R,T,S sur un point p 
 point multiplicationMatricePoint(matrice m1, point p2){
   int i,k;
@@ -69,10 +67,11 @@ point multiplicationMatricePoint(matrice m1, point p2){
   }
   return p3;
 }
+*/
 
 
 //Genere la matrice de translation en fonction des x,y,z donnés
-matrice genereT(float x,float y, float z){
+void genereT(float x,float y, float z, matrice m){
   matrice m;
   m = initialiserMatriceAvec1();
   m[0][0] = 1;
@@ -81,19 +80,20 @@ matrice genereT(float x,float y, float z){
   m[0][3] = x;
   m[1][3] = y;
   m[2][3] = z;
-  return m;
 }
 
 //Genere la matrice de mise a l'echelle en fonction de x,y,z 
-matrice genereS(float x, float y, float z){
+matrice genereS(float x, float y, float z, matrice m){
   matrice m;
   m = initialiserMatriceAvec1();
   m[0][0] = x;
   m[1][1] = y;
   m[2][2] = z;
-  return m;
 }
 
+
+/* Sah mon reuf t'es un grand deglingos et il va falloir m'encadrer ce code
+ (et le montrer a ezequel )
 
 //Genere la matrice de rotation autour de l'axe y, On considere ici que l'objet tourne autour de l'origine
 matrice genereRAutourY(){
@@ -110,6 +110,7 @@ matrice genereRAutourY(){
 
 	return m;
 }
+
 
 
 

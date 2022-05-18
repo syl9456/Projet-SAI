@@ -3,11 +3,23 @@
 #include "affichage.h"
 #include "mouvementsFormes.h"
 
+/*
 //Variables pour l'animations et le Frustrum()/gluLookAt()
 float angle = 0;
 float rayon = 50;
 float eyex,eyey=10,eyez;
-int droite = 0;
+*/
+
+
+// Position de la vue du joueur
+double vueX;
+double vueY;
+double vueZ; 
+
+// Position du jour
+double posX = 0;
+double posY = 0;
+double posZ = 0;
 
 
 //Sommet de centre de fenetre (0,0,0)
@@ -25,33 +37,40 @@ plateforme plate;
 
 //Fonction pour raffraichir la fenetre (encore rien fait de plus que le tp)
 void animer(){
-  if (droite) angle += 0.005;
+  /*if (droite) angle += 0.005;
   else angle -= 0.005;
   
   if(angle > 360) angle = 0;
   if(angle < 0) angle = 360;
-
-  eyex = rayon * cos(angle);
-  eyez = rayon * sin(angle);
+  */
+  vueX = 10;//rayon * cos(angle);
+  vueZ = 10;//rayon * sin(angle);
 
   glutPostRedisplay();
 }
 
 //Fonction pour gérer les touches du clavier (encore rien fait de plus que le tp)
 void gererClavier(unsigned char touche, int x, int y){
-  if(touche == 'a'){
-    if (droite == 1){
-      droite = 0;
-    }
-    else droite = 1;
+  if(touche == 'z'){
+    vueY += 1;
   }
+  if(touche == 'q'){
+    posZ += 1;
+  }
+  if(touche == 's'){
+    posX -= 1;
+  }
+  if(touche == 'd'){
+    posZ += 1;
+  }
+
 }
 
 //Fonction pour initialiser toutes les structures (maisons,plateformes...) dans la fenetre 
 //(NB faire des listes de ces structures)
 void intialiser_Structures(){
-  centre.x = 0;
-  centre.y = 0;
+  centre.x = 150;
+  centre.y = 100;
   centre.z = 0;
 
   mais = init_Maison(centre, TAILLE_STRUC);
@@ -67,7 +86,7 @@ void affichage(){
   glLoadIdentity();
 
   glFrustum(-1,1,-1,1,1,50000);
-  gluLookAt(eyex,eyey,eyez,0,0,0,0,1,0);
+  gluLookAt(vueX,vueY,vueZ,posX,posY,posZ,0,1,0);
 
   trace_Origine();
   trace_Maison(mais);

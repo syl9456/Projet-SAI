@@ -15,14 +15,16 @@ typedef float point[TAILLE_MATRICE];
 
 
 
-matrice initialiserMatrice();
-matrice initialiserMatriceAvec1();
-matrice initialiseMatriceDeSommetAvec1(sommet s);
-matrice genereS(float x, float y, float z);
-matrice genereT(float x,float y, float z);
+void initialiserMatrice();
+void initialiserMatriceAvec1();
+void initialiseMatriceDeSommetAvec1(sommet s);
+void genereS(float x, float y, float z);
+void genereT(float x,float y, float z);
+/* ??? mon frero ?? 
 matrice genereRAutourY();
-matrice multiplicationMatrice(matrice m1, matrice m2);
-point multiplicationMatricePoint(matrice m1, point p2);
+*/
+void multiplicationMatrice(matrice m1, matrice m2);
+//point multiplicationMatricePoint(matrice m1, point p2);
 void afficheMatrice(matrice m);
 void affichePoint(point p);
 
