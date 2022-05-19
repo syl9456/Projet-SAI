@@ -1,7 +1,7 @@
 #include "init.h"
 
 //Initalisation d'une maison par rapport a son centre c et sa taille
-maison init_Maison(sommet c, int taille){
+maison init_Maison(sommet c, float taille){
 
 	int hauteur_murs = HAUTEUR_MAISON;
 	int hauteur_toit = HAUTEUR_MAISON;
@@ -180,7 +180,7 @@ maison init_Maison(sommet c, int taille){
 
 
 //Initalisation d'une plateforme par rapport a son centre c et sa taille
-plateforme init_Plateforme(sommet c, int taille){
+plateforme init_Plateforme(sommet c, float taille){
 
 	plateforme plate;
 	int hauteur_murs = HAUTEUR_PLATEFORME;

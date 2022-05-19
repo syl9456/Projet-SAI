@@ -26,7 +26,7 @@ typedef struct couleur{
 }couleur;
 
 typedef struct sommet{
-	int x,y,z;
+	float x,y,z;
 }sommet;
 
 typedef struct plan{

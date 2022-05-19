@@ -19,11 +19,10 @@ typedef struct point{
 
 
 
-
 matrice initialiserMatrice();
-matrice initialiserMatriceAvec1();
-point initialiserMatriceDeSommetAvec1(sommet s);
-point initialiserMatriceDeFloatAvec1(float x, float y, float z);
+matrice initialiserMatriceDeFloat(float a,float b, float c,float d,float e, float f,float g,float , float i);
+point initialiserPointDeSommet(sommet s);
+point initialiserPointDeFloat(float x, float y, float z);
 matrice genereS(float x, float y, float z);
 matrice genereT(float x,float y, float z);
 matrice genereRAutourX(float angle);

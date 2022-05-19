@@ -4,8 +4,8 @@
 #include "matrices.h"
 
 //Variables pour l'animations et le Frustrum()/gluLookAt()
-float angleXZ = 0;
-float angleY = 0;
+float angleXZ = 0.0;
+float angleY = 0.0;
 
 //Position de l'observateur
 point posEye;
@@ -17,8 +17,8 @@ point dirEye;
 point orthoDirEye;
 
 // Les états des touches. Initialisé a zéro quand aucune touche n'est pressée
-float deltaAngleXZ = 0;
-float deltaAngleY = 0;
+float deltaAngleXZ = 0.0;
+float deltaAngleY = 0.0;
 float avant = 0;
 float cotes = 0;
 
@@ -69,11 +69,13 @@ void animer(){
   glutPostRedisplay();
 }
 
+
+
 //Fonction pour initialiser toutes les structures (maisons,plateformes...) dans la fenetre 
 //(NB faire des listes de ces structures)
 void intialiser_Structures(){
-  centre.x = 150;
-  centre.y = 100;
+  centre.x = 0;
+  centre.y = 0;
   centre.z = 0;
 
   mais = init_Maison(centre, TAILLE_STRUC);
@@ -92,14 +94,14 @@ void affichage(){
   glFrustum(-1,1,-1,1,1,50000);
 
   gluLookAt(posEye.d[0],
-    posEye.d[1],
-    posEye.d[2],
-    posEye.d[0] + dirEye.d[0],
-    posEye.d[1] + dirEye.d[1],
-    posEye.d[2] + dirEye.d[2],
-    0,
-    1,
-    0);
+            posEye.d[1],
+            posEye.d[2],
+            posEye.d[0] + dirEye.d[0],
+            posEye.d[1] + dirEye.d[1],
+            posEye.d[2] + dirEye.d[2],
+            0,
+            1,
+            0);
 
   trace_Origine();
   trace_Maison(mais);
@@ -182,12 +184,13 @@ void mouvementSouris(int x, int y) {
     dirEye = multiplicationMatricePoint(genereRAutourY(-deltaAngleXZ), dirEye);
     dirEye = multiplicationMatricePoint(genereRAutourZ(deltaAngleY), dirEye);
     dirEye = multiplicationMatricePoint(genereRAutourX(deltaAngleY), dirEye);
+    affichePoint(dirEye);
   }
 }
 
 void bouttonSouris(int button, int state, int x, int y) {
 
-  // démarrer UN mouvement uniquement si le bouton gauche de la souris est pressé
+  // démarrer un mouvement uniquement si le bouton gauche de la souris est pressé
   if (button == GLUT_LEFT_BUTTON) {
 
     // Lorsque le bouton est relâché
@@ -218,9 +221,10 @@ int main(int argc, char *argv[]){
   /********** Init de Glut ********/
 
 
-  posEye = initialiserMatriceDeFloatAvec1(0,0,0);
-  dirEye = initialiserMatriceDeFloatAvec1(1,0,0);
-  orthoDirEye = initialiserMatriceDeFloatAvec1(0,0,1);
+  posEye = initialiserPointDeFloat(-50,10,0);
+  dirEye = initialiserPointDeFloat(1,0,0);
+  orthoDirEye = initialiserPointDeFloat(0,0,1);
+
 
   glutInit(&argc,argv);
   glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
@@ -242,9 +246,7 @@ int main(int argc, char *argv[]){
   glutMouseFunc(bouttonSouris);
   glutMotionFunc(mouvementSouris);
 
-
   glutMainLoop();
 
   exit(0);
-
 }
