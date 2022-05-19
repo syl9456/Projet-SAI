@@ -5,11 +5,11 @@ EXEC = apli
 
 jeu : $(EXEC)
 
-apli : main.o affichage.o init.o mouvementsFormes.o
-	gcc -o apli main.o affichage.o init.o mouvementsFormes.o $(CFLAGS) $(LDFLAGS)
+apli : main.o affichage.o init.o mouvementsFormes.o matrices.o
+	gcc -o apli main.o affichage.o init.o mouvementsFormes.o matrices.o $(CFLAGS) $(LDFLAGS)
 
 
-main.o : main.c affichage.h setup.h mouvementsFormes.h
+main.o : main.c affichage.h setup.h mouvementsFormes.h matrices.h
 	gcc -o main.o -c main.c $(CFLAGS)
 
 
@@ -27,7 +27,7 @@ init.o : init.c init.h setup.h
 
 matrices.o : matrices.c matrices.h setup.h
 	gcc -o matrices.o -c matrices.c $(CFLAGS)
-	
+
 
 clean : 
 	rm -rf *.o $(EXEC)

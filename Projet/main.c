@@ -1,25 +1,31 @@
 #include "setup.h"
 #include "init.h"
 #include "affichage.h"
-#include "mouvementsFormes.h"
+#include "matrices.h"
 
-/*
 //Variables pour l'animations et le Frustrum()/gluLookAt()
-float angle = 0;
-float rayon = 50;
-float eyex,eyey=10,eyez;
-*/
+float angleXZ = 0;
+float angleY = 0;
 
+//Position de l'observateur
+point posEye;
 
-// Position de la vue du joueur
-double vueX;
-double vueY;
-double vueZ; 
+//Direction vers laquelle l'observateur regarde
+point dirEye;
 
-// Position du jour
-double posX = 0;
-double posY = 0;
-double posZ = 0;
+//Direction Orthogonale a celle vers laquelle l'observateur regarde
+point orthoDirEye;
+
+// Les états des touches. Initialisé a zéro quand aucune touche n'est pressée
+float deltaAngleXZ = 0;
+float deltaAngleY = 0;
+float avant = 0;
+float cotes = 0;
+
+// Une variable pour stocker la position X et Y où la souris est cliquée.
+int xSouris = -1;
+int ySouris = -1;
+
 
 
 //Sommet de centre de fenetre (0,0,0)
@@ -35,35 +41,32 @@ plateforme plate;
 
 
 
-//Fonction pour raffraichir la fenetre (encore rien fait de plus que le tp)
-void animer(){
-  /*if (droite) angle += 0.005;
-  else angle -= 0.005;
-  
-  if(angle > 360) angle = 0;
-  if(angle < 0) angle = 360;
-  */
-  vueX = 10;//rayon * cos(angle);
-  vueZ = 10;//rayon * sin(angle);
 
-  glutPostRedisplay();
+
+
+
+
+/************************************************************************/
+
+//                      AFFICHAGE
+
+/************************************************************************/
+
+//Calcule ici le k tel que un vecteur orthogonal a la direction sera (k,nk,mk) ou l'on enregistre n et m
+void calculeOrtho(){
 }
 
-//Fonction pour gérer les touches du clavier (encore rien fait de plus que le tp)
-void gererClavier(unsigned char touche, int x, int y){
-  if(touche == 'z'){
-    vueY += 1;
-  }
-  if(touche == 'q'){
-    posZ += 1;
-  }
-  if(touche == 's'){
-    posX -= 1;
-  }
-  if(touche == 'd'){
-    posZ += 1;
-  }
 
+
+
+//Fonction pour raffraichir la fenetre (encore rien fait de plus que le tp)
+void animer(){
+  calculeOrtho();
+  posEye.d[0] += avant * dirEye.d[0] * 0.3; //On change le x de la position du personnage 
+  posEye.d[2] += avant * dirEye.d[2] * 0.3; //On change le y de la position du personnage
+
+
+  glutPostRedisplay();
 }
 
 //Fonction pour initialiser toutes les structures (maisons,plateformes...) dans la fenetre 
@@ -85,8 +88,18 @@ void affichage(){
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
+
   glFrustum(-1,1,-1,1,1,50000);
-  gluLookAt(vueX,vueY,vueZ,posX,posY,posZ,0,1,0);
+
+  gluLookAt(posEye.d[0],
+    posEye.d[1],
+    posEye.d[2],
+    posEye.d[0] + dirEye.d[0],
+    posEye.d[1] + dirEye.d[1],
+    posEye.d[2] + dirEye.d[2],
+    0,
+    1,
+    0);
 
   trace_Origine();
   trace_Maison(mais);
@@ -98,25 +111,137 @@ void affichage(){
 
 
 
+
+
+
+
+
+/************************************************************************/
+
+//                      CLAVIER
+
+/************************************************************************/
+
+
+//Fonction pour gérer les touches du clavier, si la touche est appuyée les multiplicateurs de la direction (avan/cotes) sont mis a 0.5
+void gererClavier(unsigned char touche, int x, int y){
+  switch(touche){
+    case 27: //Touche echap
+      exit(0);
+      break;
+    case 'z':
+      avant = 0.5;
+      break;
+    case 's':
+      avant = -0.5;
+      break;
+    case 'd':
+      cotes = 0.5;
+      break;
+    case 'q':
+      cotes = -0.5;
+      break;
+  }
+}
+
+//Si une des touches du clavier est relevée on met le multiplicateur de la direction (avant/cotes) a 0
+void gererUpClavier(unsigned char touche, int x, int y){
+  switch(touche){
+    case 'z': 
+    case 's' : 
+      avant = 0;
+      break;
+    case 'd':
+    case 'q':
+      cotes = 0;
+      break;
+  }
+}
+
+
+
+
+
+
+
+/************************************************************************/
+
+//                      SOURIS
+
+/************************************************************************/
+void mouvementSouris(int x, int y) {
+
+  // Si le bouton gauche est enfoncé.
+  if (xSouris >= 0) {
+
+    // Update deltaAngle
+    deltaAngleXZ = (x - xSouris) * 0.00001;
+    deltaAngleY = (y - ySouris) * 0.00001;
+
+    // Update la Direction de la Caméra Gauche Droite
+    dirEye = multiplicationMatricePoint(genereRAutourY(-deltaAngleXZ), dirEye);
+    dirEye = multiplicationMatricePoint(genereRAutourZ(deltaAngleY), dirEye);
+    dirEye = multiplicationMatricePoint(genereRAutourX(deltaAngleY), dirEye);
+  }
+}
+
+void bouttonSouris(int button, int state, int x, int y) {
+
+  // démarrer UN mouvement uniquement si le bouton gauche de la souris est pressé
+  if (button == GLUT_LEFT_BUTTON) {
+
+    // Lorsque le bouton est relâché
+    if (state == GLUT_UP) {
+      angleXZ += deltaAngleXZ;
+      angleY += deltaAngleY;
+      xSouris = -1;
+      ySouris = -1;
+    }
+    else  {// Etat  = GLUT_DOWN
+      xSouris = x;
+      ySouris = y;
+    }
+  }
+}
+
+
+
+
+
+
+
+/************************************************************************/
+
+/************************************************************************/
+
 int main(int argc, char *argv[]){
-  /********** Init de Glut *********/
+  /********** Init de Glut ********/
+
+
+  posEye = initialiserMatriceDeFloatAvec1(0,0,0);
+  dirEye = initialiserMatriceDeFloatAvec1(1,0,0);
+  orthoDirEye = initialiserMatriceDeFloatAvec1(0,0,1);
 
   glutInit(&argc,argv);
   glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
-
   glutInitWindowSize(FENX,FENY);
   glutInitWindowPosition(50,50);
-
   glutCreateWindow("Jeu du futur");
   glEnable(GL_DEPTH_TEST);
-
-
   intialiser_Structures();
 
-
+  //Geestion affichage et réaffichage
   glutDisplayFunc(affichage);
-  glutKeyboardFunc(gererClavier);
   glutIdleFunc(animer);
+
+  //Gestion du clavier
+  glutKeyboardFunc(gererClavier);
+  glutKeyboardUpFunc(gererUpClavier);
+
+  // Gestion de la souris
+  glutMouseFunc(bouttonSouris);
+  glutMotionFunc(mouvementSouris);
+
 
   glutMainLoop();
 

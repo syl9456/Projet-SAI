@@ -7,24 +7,30 @@
 #define TAILLE_MATRICE 4
 
 //Def de la matrice avec sa taille
-typedef float matrice[TAILLE_MATRICE][TAILLE_MATRICE];
+typedef struct matrice{
+	float d[TAILLE_MATRICE][TAILLE_MATRICE];
+}matrice;
 
 //Pour appliquer une matrice sur un sommet (x,y,z) 
 //on doit transformer ce sommet en une matrice point
-typedef float point[TAILLE_MATRICE];
+typedef struct point{
+	float d[TAILLE_MATRICE];
+}point;
 
 
 
-void initialiserMatrice();
-void initialiserMatriceAvec1();
-void initialiseMatriceDeSommetAvec1(sommet s);
-void genereS(float x, float y, float z);
-void genereT(float x,float y, float z);
-/* ??? mon frero ?? 
-matrice genereRAutourY();
-*/
-void multiplicationMatrice(matrice m1, matrice m2);
-//point multiplicationMatricePoint(matrice m1, point p2);
+
+matrice initialiserMatrice();
+matrice initialiserMatriceAvec1();
+point initialiserMatriceDeSommetAvec1(sommet s);
+point initialiserMatriceDeFloatAvec1(float x, float y, float z);
+matrice genereS(float x, float y, float z);
+matrice genereT(float x,float y, float z);
+matrice genereRAutourX(float angle);
+matrice genereRAutourY(float angle);
+matrice genereRAutourZ(float angle);
+matrice multiplicationMatrice(matrice m1, matrice m2);
+point multiplicationMatricePoint(matrice m1, point p2);
 void afficheMatrice(matrice m);
 void affichePoint(point p);
 
