@@ -3,28 +3,39 @@
 #include "affichage.h"
 #include "matrices.h"
 
-//Variables pour l'animations et le Frustrum()/gluLookAt()
-float angleXZ = 0.0;
-float angleY = 0.0;
 
-//Position de l'observateur
+//Variables de vitesse de camera
+float vitesseCamera = 0.3;
+
+float sensitivite = 0.005;
+
+
+//(point ici est un vecteur4)
+//Position de l'observateur (endroit) (-50,10,0)
 point posEye;
-
-//Direction vers laquelle l'observateur regarde
+//Direction vers laquelle l'observateur regarde (vecteur) (1,0,0)  pour pouvoir marcher droit ou reculer
 point dirEye;
-
-//Direction Orthogonale a celle vers laquelle l'observateur regarde
+//Direction Orthogonale a celle vers laquelle l'observateur regarde (vecteur) (0,0,1)  pour pouvoir marcher sur les cotes
 point orthoDirEye;
+//Direction vers le haut pour la tete (vecteur) (0,1,0)
+point upEye;
 
-// Les états des touches. Initialisé a zéro quand aucune touche n'est pressée
-float deltaAngleXZ = 0.0;
-float deltaAngleY = 0.0;
+
 float avant = 0;
 float cotes = 0;
 
 // Une variable pour stocker la position X et Y où la souris est cliquée.
-int xSouris = -1;
-int ySouris = -1;
+float dernierX = FENX / 2;
+float dernierY = FENY / 2;
+
+//Garde en mémoire la position du curseur sur l'écran
+float xSouris=0,ySouris=0;
+//Angles d'euler : compliqué : 
+//nous avons deux angles car l'angle de tantage ne nous interesse pas ici
+//angle de roulis est un mouvement de rotation autour de l'axe de roulis ici autour de z
+//angle de lacet est un mouvement de rotation autour de l'axe de lacet ici autour de y
+//ref : https://learnopengl.com/Getting-started/Camera    dans LookAround
+float angleRoulis=0,angleLacet=0;
 
 
 
@@ -52,8 +63,10 @@ plateforme plate;
 
 /************************************************************************/
 
-//Calcule ici le k tel que un vecteur orthogonal a la direction sera (k,nk,mk) ou l'on enregistre n et m
+//Calcule ici dirEyeOrtho en fonction de UpEye et de DirEye
+//Pour cela il faut que Up soit definit et ensuite on fait un produit scalaire et on normalise
 void calculeOrtho(){
+  orthoDirEye = normalise(produitScalaire(upEye,dirEye));
 }
 
 
@@ -62,8 +75,17 @@ void calculeOrtho(){
 //Fonction pour raffraichir la fenetre (encore rien fait de plus que le tp)
 void animer(){
   calculeOrtho();
-  posEye.d[0] += avant * dirEye.d[0] * 0.3; //On change le x de la position du personnage 
-  posEye.d[2] += avant * dirEye.d[2] * 0.3; //On change le y de la position du personnage
+
+  if(avant){
+    posEye.d[0] += avant * vitesseCamera * dirEye.d[0];
+    posEye.d[1] += avant * vitesseCamera * dirEye.d[1];
+    posEye.d[2] += avant * vitesseCamera * dirEye.d[2];
+  }
+  if(cotes){
+    posEye.d[0] += cotes * vitesseCamera *  orthoDirEye.d[0];
+    posEye.d[1] += cotes * vitesseCamera *  orthoDirEye.d[1];
+    posEye.d[2] += cotes * vitesseCamera *  orthoDirEye.d[2];
+  }
 
 
   glutPostRedisplay();
@@ -99,9 +121,9 @@ void affichage(){
             posEye.d[0] + dirEye.d[0],
             posEye.d[1] + dirEye.d[1],
             posEye.d[2] + dirEye.d[2],
-            0,
-            1,
-            0);
+            upEye.d[0],
+            upEye.d[1],
+            upEye.d[2]);
 
   trace_Origine();
   trace_Maison(mais);
@@ -132,16 +154,16 @@ void gererClavier(unsigned char touche, int x, int y){
       exit(0);
       break;
     case 'z':
-      avant = 0.5;
+      avant = 1;
       break;
     case 's':
-      avant = -0.5;
+      avant = -1;
       break;
     case 'd':
-      cotes = 0.5;
+      cotes = -1;
       break;
     case 'q':
-      cotes = -0.5;
+      cotes = 1;
       break;
   }
 }
@@ -171,40 +193,38 @@ void gererUpClavier(unsigned char touche, int x, int y){
 //                      SOURIS
 
 /************************************************************************/
-void mouvementSouris(int x, int y) {
+void mouvementSouris(int xPos, int yPos) {
 
-  // Si le bouton gauche est enfoncé.
-  if (xSouris >= 0) {
+  xSouris = (float)xPos - dernierX;
+  ySouris = dernierY - (float)yPos;
 
-    // Update deltaAngle
-    deltaAngleXZ = (x - xSouris) * 0.00001;
-    deltaAngleY = (y - ySouris) * 0.00001;
+  dernierX = (float)xPos;
+  dernierY = (float)yPos;
 
-    // Update la Direction de la Caméra Gauche Droite
-    dirEye = multiplicationMatricePoint(genereRAutourY(-deltaAngleXZ), dirEye);
-    dirEye = multiplicationMatricePoint(genereRAutourZ(deltaAngleY), dirEye);
-    dirEye = multiplicationMatricePoint(genereRAutourX(deltaAngleY), dirEye);
-    affichePoint(dirEye);
-  }
+  xSouris *= sensitivite;
+  ySouris *= sensitivite;
+
+  angleRoulis += xSouris;
+  angleLacet += ySouris;
+
+
+  if(angleLacet > 89.0)
+    angleLacet = 89.0;
+  if(angleLacet < -89.0)
+    angleLacet = -89.0;
+
+
+  point direction;
+
+  direction.d[0] = cos(angleRoulis) * cos(angleLacet);
+  direction.d[1] = sin(angleLacet);
+  direction.d[2] = sin(angleRoulis) * cos(angleLacet);
+
+  dirEye = normalise(direction);
 }
 
 void bouttonSouris(int button, int state, int x, int y) {
 
-  // démarrer un mouvement uniquement si le bouton gauche de la souris est pressé
-  if (button == GLUT_LEFT_BUTTON) {
-
-    // Lorsque le bouton est relâché
-    if (state == GLUT_UP) {
-      angleXZ += deltaAngleXZ;
-      angleY += deltaAngleY;
-      xSouris = -1;
-      ySouris = -1;
-    }
-    else  {// Etat  = GLUT_DOWN
-      xSouris = x;
-      ySouris = y;
-    }
-  }
 }
 
 
@@ -223,7 +243,8 @@ int main(int argc, char *argv[]){
 
   posEye = initialiserPointDeFloat(-50,10,0);
   dirEye = initialiserPointDeFloat(1,0,0);
-  orthoDirEye = initialiserPointDeFloat(0,0,1);
+  orthoDirEye = initialiserPointDeFloat(0,0,0);
+  upEye = initialiserPointDeFloat(0,1,0);
 
 
   glutInit(&argc,argv);
@@ -244,7 +265,7 @@ int main(int argc, char *argv[]){
 
   // Gestion de la souris
   glutMouseFunc(bouttonSouris);
-  glutMotionFunc(mouvementSouris);
+  glutPassiveMotionFunc(mouvementSouris);
 
   glutMainLoop();
 

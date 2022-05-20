@@ -13,14 +13,16 @@ typedef struct matrice{
 
 //Pour appliquer une matrice sur un sommet (x,y,z) 
 //on doit transformer ce sommet en une matrice point
+//Point peut aussi marcher pour designer un vecteur4
 typedef struct point{
 	float d[TAILLE_MATRICE];
 }point;
 
 
 
+
 matrice initialiserMatrice();
-matrice initialiserMatriceDeFloat(float a,float b, float c,float d,float e, float f,float g,float , float i);
+matrice initialiserMatriceDeFloat(float a,float b, float c,float d,float e, float f,float g,float h, float i);
 point initialiserPointDeSommet(sommet s);
 point initialiserPointDeFloat(float x, float y, float z);
 matrice genereS(float x, float y, float z);
@@ -32,5 +34,10 @@ matrice multiplicationMatrice(matrice m1, matrice m2);
 point multiplicationMatricePoint(matrice m1, point p2);
 void afficheMatrice(matrice m);
 void affichePoint(point p);
+
+point produitScalaire(point p1, point p2);
+point normalise(point p);
+point soustraction(point p1, point p2);
+point addition(point p1, point p2);
 
 #endif

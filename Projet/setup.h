@@ -8,6 +8,8 @@
 #include <stdarg.h>
 #include "GL/gl.h"
 #include "GL/glut.h"
+#include "time.h"
+
 #include <math.h>
 
 

@@ -159,6 +159,57 @@ matrice genereRAutourZ(float angle){
 
 
 
+point produitScalaire(point p1, point p2){
+  point p;
+  p = initialiserPointDeFloat(0,0,0);
+  p.d[0] = (p1.d[1]*p2.d[2]) - (p1.d[2]*p2.d[1]);
+  p.d[1] = (p1.d[2]*p2.d[0]) - (p1.d[0]*p2.d[2]);
+  p.d[2] = (p1.d[0]*p2.d[1]) - (p1.d[1]*p2.d[0]);
+
+  return p;
+}
+
+
+point normalise(point p){
+  float w = sqrt(p.d[0]* p.d[0] + p.d[1]* p.d[1] + p.d[2]* p.d[2]);
+
+  p.d[0] /= w;
+  p.d[1] /= w;
+  p.d[2] /= w;
+
+  return p;
+}
+
+
+point addition(point p1, point p2){
+  point p; 
+  p = initialiserPointDeFloat(0,0,0);
+
+  p.d[0] = p1.d[0] + p2.d[0]; 
+  p.d[1] = p1.d[1] + p2.d[1];
+  p.d[2] = p1.d[2] + p2.d[2];
+
+  return p;
+}
+
+
+point soustraction(point p1, point p2){
+  point p; 
+  p = initialiserPointDeFloat(0,0,0);
+
+  p.d[0] = p1.d[0] - p2.d[0];
+  p.d[1] = p1.d[1] - p2.d[1];
+  p.d[2] = p1.d[2] - p2.d[2];
+
+  return p;
+}
+
+
+
+
+
+
+
 //Fonctions d'affichage sur terminal
 void afficheMatrice(matrice m){
   int i,j;
