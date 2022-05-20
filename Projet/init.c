@@ -3,8 +3,8 @@
 //Initalisation d'une maison par rapport a son centre c et sa taille
 maison init_Maison(sommet c, float taille){
 
-	int hauteur_murs = HAUTEUR_MAISON;
-	int hauteur_toit = HAUTEUR_MAISON;
+	float hauteur_murs = HAUTEUR_MAISON;
+	float hauteur_toit = HAUTEUR_MAISON;
 
 
 	maison mais;
@@ -110,40 +110,40 @@ maison init_Maison(sommet c, float taille){
 	//Toit
 	//Carrés
 	//6
-	mais.plans[5].s1.x = c.x + taille;
+	mais.plans[5].s1.x = c.x + taille + (taille*(10./100.));
 	mais.plans[5].s1.y = c.y + hauteur_murs + hauteur_toit;
 	mais.plans[5].s1.z = c.z;
 
-	mais.plans[5].s2.x = c.x - taille;
+	mais.plans[5].s2.x = c.x - taille - (taille*(10./100.));
 	mais.plans[5].s2.y = c.y + hauteur_murs + hauteur_toit;
 	mais.plans[5].s2.z = c.z;
 
-	mais.plans[5].s3.x = c.x - taille;
-	mais.plans[5].s3.y = c.y + hauteur_murs;
-	mais.plans[5].s3.z = c.z - taille;
+	mais.plans[5].s3.x = c.x - taille - (taille*(10./100.));
+	mais.plans[5].s3.y = c.y + hauteur_murs - (taille*(10./100.));
+	mais.plans[5].s3.z = c.z - taille - (taille*(10./100.));
 
-	mais.plans[5].s4.x = c.x + taille;
-	mais.plans[5].s4.y = c.y + hauteur_murs;
-	mais.plans[5].s4.z = c.z - taille;
+	mais.plans[5].s4.x = c.x + taille + (taille*(10./100.));
+	mais.plans[5].s4.y = c.y + hauteur_murs - (taille*(10./100.));
+	mais.plans[5].s4.z = c.z - taille - (taille*(10./100.));
 
 
 
 	//7
-	mais.plans[6].s1.x = c.x - taille;
+	mais.plans[6].s1.x = c.x - taille - (taille*(10./100.));
 	mais.plans[6].s1.y = c.y + hauteur_murs + hauteur_toit;
 	mais.plans[6].s1.z = c.z;
 
-	mais.plans[6].s2.x = c.x + taille;
+	mais.plans[6].s2.x = c.x + taille + (taille*(10./100.));
 	mais.plans[6].s2.y = c.y + hauteur_murs + hauteur_toit;
 	mais.plans[6].s2.z = c.z;
 
-	mais.plans[6].s3.x = c.x + taille;
-	mais.plans[6].s3.y = c.y + hauteur_murs;
-	mais.plans[6].s3.z = c.z + taille;
+	mais.plans[6].s3.x = c.x + taille + (taille*(10./100.));
+	mais.plans[6].s3.y = c.y + hauteur_murs - (taille*(10./100.));
+	mais.plans[6].s3.z = c.z + taille + (taille*(10./100.));
 
-	mais.plans[6].s4.x = c.x - taille;
-	mais.plans[6].s4.y = c.y + hauteur_murs;
-	mais.plans[6].s4.z = c.z + taille;
+	mais.plans[6].s4.x = c.x - taille - (taille*(10./100.));
+	mais.plans[6].s4.y = c.y + hauteur_murs - (taille*(10./100.));
+	mais.plans[6].s4.z = c.z + taille + (taille*(10./100.));
 
 
 
