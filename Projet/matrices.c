@@ -36,16 +36,6 @@ matrice initialiserMatriceDeFloat(float a,float b, float c,float d,float e, floa
 }
 
 
-//Transforme un sommet s en une matrice point et retourne ce point
-point initialiserPointDeSommet(sommet s){
-  point p;
-  p.d[0] = (float)s.x;
-  p.d[1] = (float)s.y;
-  p.d[2] = (float)s.z;
-  p.d[3] = 1.0;
-  return p;
-}
-
 //Transforme trois coordonnées en une matrice point et retourne ce point
 point initialiserPointDeFloat(float x, float y, float z){
   point p;
@@ -54,6 +44,16 @@ point initialiserPointDeFloat(float x, float y, float z){
   p.d[2] = z;
   p.d[3] = 1.0;
   return p;
+}
+
+
+vecteur initialiserVecteurDeFloat(float x, float y, float z){
+  vecteur v;
+  v.d[0] = x;
+  v.d[1] = y;
+  v.d[2] = z;
+  v.d[3] = 1.0;
+  return v;
 }
 
 
@@ -77,6 +77,19 @@ matrice multiplicationMatrice(matrice m1, matrice m2){
 point multiplicationMatricePoint(matrice m1, point p2){
    int i,j;
    point p3;
+   for(i = 0; i <TAILLE_MATRICE ; i++){
+    p3.d[i] = 0;
+     for(j = 0; j <TAILLE_MATRICE ; j++) {
+       p3.d[i] += m1.d[i][j] * p2.d[j];
+     }
+  }
+  return p3;
+}
+
+//Application d'une mutiplication de matrice de déplacement (R,T,S..) et d'un vecteur p 
+vecteur multiplicationMatriceVecteur(matrice m1, vecteur p2){
+   int i,j;
+   vecteur p3;
    for(i = 0; i <TAILLE_MATRICE ; i++){
     p3.d[i] = 0;
      for(j = 0; j <TAILLE_MATRICE ; j++) {
@@ -159,9 +172,9 @@ matrice genereRAutourZ(float angle){
 
 
 
-point produitScalaire(point p1, point p2){
-  point p;
-  p = initialiserPointDeFloat(0,0,0);
+vecteur produitScalaire(vecteur p1, vecteur p2){
+  vecteur p;
+  p = initialiserVecteurDeFloat(0,0,0);
   p.d[0] = (p1.d[1]*p2.d[2]) - (p1.d[2]*p2.d[1]);
   p.d[1] = (p1.d[2]*p2.d[0]) - (p1.d[0]*p2.d[2]);
   p.d[2] = (p1.d[0]*p2.d[1]) - (p1.d[1]*p2.d[0]);
@@ -170,7 +183,7 @@ point produitScalaire(point p1, point p2){
 }
 
 
-point normalise(point p){
+vecteur normalise(vecteur p){
   float w = sqrt(p.d[0]* p.d[0] + p.d[1]* p.d[1] + p.d[2]* p.d[2]);
 
   p.d[0] /= w;
@@ -181,9 +194,9 @@ point normalise(point p){
 }
 
 
-point addition(point p1, point p2){
-  point p; 
-  p = initialiserPointDeFloat(0,0,0);
+vecteur addition(vecteur p1, vecteur p2){
+  vecteur p; 
+  p = initialiserVecteurDeFloat(0,0,0);
 
   p.d[0] = p1.d[0] + p2.d[0]; 
   p.d[1] = p1.d[1] + p2.d[1];
@@ -193,9 +206,9 @@ point addition(point p1, point p2){
 }
 
 
-point soustraction(point p1, point p2){
-  point p; 
-  p = initialiserPointDeFloat(0,0,0);
+vecteur soustraction(vecteur p1, vecteur p2){
+  vecteur p; 
+  p = initialiserVecteurDeFloat(0,0,0);
 
   p.d[0] = p1.d[0] - p2.d[0];
   p.d[1] = p1.d[1] - p2.d[1];
@@ -203,10 +216,6 @@ point soustraction(point p1, point p2){
 
   return p;
 }
-
-
-
-
 
 
 
@@ -226,6 +235,16 @@ void afficheMatrice(matrice m){
 
 
 void affichePoint(point p){
+  int i;
+  for(i = 0; i <TAILLE_MATRICE; i++){
+    printf("[%f]\n",p.d[i]);
+  }
+  printf("\n");
+}
+
+
+
+void afficheVecteur(vecteur p){
   int i;
   for(i = 0; i <TAILLE_MATRICE; i++){
     printf("[%f]\n",p.d[i]);

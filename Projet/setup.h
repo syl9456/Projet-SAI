@@ -9,7 +9,6 @@
 #include "GL/gl.h"
 #include "GL/glut.h"
 #include "time.h"
-
 #include <math.h>
 
 
@@ -20,35 +19,51 @@
 #define HAUTEUR_MAISON 20
 #define TAILLE_STRUC 20
 
+#define HAUTEUR_JOUEUR 10
+
 #define PI 3.141592 
+
+
 
 
 typedef struct couleur{
 	float r,g,b;
 }couleur;
 
-typedef struct sommet{
-	float x,y,z;
-}sommet;
 
+//Un point est construit avec 3 float x y z
+typedef struct point{
+	float d[4];
+}point;
+
+//Un plna est construit avec 4 points
 typedef struct plan{
-	sommet s1,s2,s3,s4;
+	point point[4];
 }plan;
 
+//Un triangle est construit avec 3 points
 typedef struct triangle{
-	sommet s1,s2,s3;
+	point point[3];
 }triangle;
 
+//Une maison est constituée de 7 plans et 2 triangles
 typedef struct maison{
-	sommet centre;
+	point centre;
 	plan plans[7];
 	triangle triangles[2];
 }maison;
 
+//Une plateforme est en fait un paralepipede rectangle donc il a 6 plans
 typedef struct plateforme{
-	sommet centre;
+	point centre;
 	plan plans[6];
 }plateforme;
+
+//Un joueur est pareil qu'une plateforme
+typedef struct joueur{
+	point centre;
+	plan plans[6];
+}joueur;
 
 
 #endif

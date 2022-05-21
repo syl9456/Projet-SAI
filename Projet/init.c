@@ -1,178 +1,112 @@
 #include "init.h"
 
 //Initalisation d'une maison par rapport a son centre c et sa taille
-maison init_Maison(sommet c, float taille){
+maison init_Maison(point c, float taille){
 
 	float hauteur_murs = HAUTEUR_MAISON;
 	float hauteur_toit = HAUTEUR_MAISON;
-
-
 	maison mais;
-
 	mais.centre = c;
+
 
 	//Sol
 	//1
-	mais.plans[0].s1.x = c.x - taille;
-	mais.plans[0].s1.y = c.y;
-	mais.plans[0].s1.z = c.z + taille;
+	mais.plans[0].point[0] = initialiserPointDeFloat(c.d[0] - taille, c.d[1], c.d[2] + taille);
 
-	mais.plans[0].s2.x = c.x + taille;
-	mais.plans[0].s2.y = c.y;
-	mais.plans[0].s2.z = c.z + taille;
+	mais.plans[0].point[1] = initialiserPointDeFloat(c.d[0] + taille, c.d[1], c.d[2] + taille);
 
-	mais.plans[0].s3.x = c.x + taille;
-	mais.plans[0].s3.y = c.y;
-	mais.plans[0].s3.z = c.z - taille;
+	mais.plans[0].point[2] = initialiserPointDeFloat(c.d[0] + taille, c.d[1], c.d[2] - taille);
 
-	mais.plans[0].s4.x = c.x - taille;
-	mais.plans[0].s4.y = c.y;
-	mais.plans[0].s4.z = c.z - taille;
+	mais.plans[0].point[3] = initialiserPointDeFloat(c.d[0] - taille, c.d[1], c.d[2] - taille);
 
 
 	//Cotes
 	//2
-	mais.plans[1].s1.x = c.x - taille;
-	mais.plans[1].s1.y = c.y;
-	mais.plans[1].s1.z = c.z + taille;
+	mais.plans[1].point[0] = initialiserPointDeFloat(c.d[0] - taille, c.d[1], c.d[2] + taille);
 
-	mais.plans[1].s2.x = c.x + taille;
-	mais.plans[1].s2.y = c.y;
-	mais.plans[1].s2.z = c.z + taille;
+	mais.plans[1].point[1] = initialiserPointDeFloat(c.d[0] + taille, c.d[1], c.d[2] + taille);
 
-	mais.plans[1].s3.x = c.x + taille;
-	mais.plans[1].s3.y = c.y + hauteur_murs;
-	mais.plans[1].s3.z = c.z + taille;
-
-	mais.plans[1].s4.x = c.x - taille;
-	mais.plans[1].s4.y = c.y + hauteur_murs;
-	mais.plans[1].s4.z = c.z + taille;
+	mais.plans[1].point[2] = initialiserPointDeFloat(c.d[0] + taille, c.d[1] + hauteur_murs , c.d[2] + taille);
+		
+	mais.plans[1].point[3] = initialiserPointDeFloat(c.d[0] - taille, c.d[1] + hauteur_murs , c.d[2] + taille);
 
 
 
 	//3
-	mais.plans[2].s1.x = c.x + taille;
-	mais.plans[2].s1.y = c.y;
-	mais.plans[2].s1.z = c.z + taille;
+	mais.plans[2].point[0] = initialiserPointDeFloat(c.d[0] + taille, c.d[1], c.d[2] + taille);
 
-	mais.plans[2].s2.x = c.x + taille;
-	mais.plans[2].s2.y = c.y;
-	mais.plans[2].s2.z = c.z - taille;
+	mais.plans[2].point[1] = initialiserPointDeFloat(c.d[0] + taille, c.d[1], c.d[2] - taille);
 
-	mais.plans[2].s3.x = c.x + taille;
-	mais.plans[2].s3.y = c.y + hauteur_murs;
-	mais.plans[2].s3.z = c.z - taille;
+	mais.plans[2].point[2] = initialiserPointDeFloat(c.d[0] + taille, c.d[1] + hauteur_murs , c.d[2] - taille);
+		
+	mais.plans[2].point[3] = initialiserPointDeFloat(c.d[0] + taille, c.d[1] + hauteur_murs , c.d[2] + taille);
 
-	mais.plans[2].s4.x = c.x + taille;
-	mais.plans[2].s4.y = c.y + hauteur_murs;
-	mais.plans[2].s4.z = c.z + taille;
 
 
 
 	//4
-	mais.plans[3].s1.x = c.x + taille;
-	mais.plans[3].s1.y = c.y;
-	mais.plans[3].s1.z = c.z - taille;
+	mais.plans[3].point[0] = initialiserPointDeFloat(c.d[0] + taille, c.d[1], c.d[2] - taille);
 
-	mais.plans[3].s2.x = c.x - taille;
-	mais.plans[3].s2.y = c.y;
-	mais.plans[3].s2.z = c.z - taille;
+	mais.plans[3].point[1] = initialiserPointDeFloat(c.d[0] - taille, c.d[1], c.d[2] - taille);
 
-	mais.plans[3].s3.x = c.x - taille;
-	mais.plans[3].s3.y = c.y + hauteur_murs;
-	mais.plans[3].s3.z = c.z - taille;
+	mais.plans[3].point[2] = initialiserPointDeFloat(c.d[0] - taille, c.d[1] + hauteur_murs , c.d[2] - taille);
+		
+	mais.plans[3].point[3] = initialiserPointDeFloat(c.d[0] + taille, c.d[1] + hauteur_murs , c.d[2] - taille);
 
-	mais.plans[3].s4.x = c.x + taille;
-	mais.plans[3].s4.y = c.y + hauteur_murs;
-	mais.plans[3].s4.z = c.z - taille;
 
 
 
 	//5
-	mais.plans[4].s1.x = c.x - taille;
-	mais.plans[4].s1.y = c.y;
-	mais.plans[4].s1.z = c.z - taille;
+	mais.plans[4].point[0] = initialiserPointDeFloat(c.d[0] - taille, c.d[1], c.d[2] - taille);
 
-	mais.plans[4].s2.x = c.x - taille;
-	mais.plans[4].s2.y = c.y;
-	mais.plans[4].s2.z = c.z + taille;
+	mais.plans[4].point[1] = initialiserPointDeFloat(c.d[0] - taille, c.d[1], c.d[2] + taille);
 
-	mais.plans[4].s3.x = c.x - taille;
-	mais.plans[4].s3.y = c.y + hauteur_murs;
-	mais.plans[4].s3.z = c.z + taille;
-
-	mais.plans[4].s4.x = c.x - taille;
-	mais.plans[4].s4.y = c.y + hauteur_murs;
-	mais.plans[4].s4.z = c.z - taille;
+	mais.plans[4].point[2] = initialiserPointDeFloat(c.d[0] - taille, c.d[1] + hauteur_murs , c.d[2] + taille);
+		
+	mais.plans[4].point[3] = initialiserPointDeFloat(c.d[0] - taille, c.d[1] + hauteur_murs , c.d[2] - taille);
 
 
 
 	//Toit
 	//Carrés
 	//6
-	mais.plans[5].s1.x = c.x + taille + (taille*(10./100.));
-	mais.plans[5].s1.y = c.y + hauteur_murs + hauteur_toit;
-	mais.plans[5].s1.z = c.z;
+	mais.plans[5].point[0] = initialiserPointDeFloat(c.d[0] + taille + (taille*(10./100.)) , c.d[1] + hauteur_murs + hauteur_toit , c.d[2]);
 
-	mais.plans[5].s2.x = c.x - taille - (taille*(10./100.));
-	mais.plans[5].s2.y = c.y + hauteur_murs + hauteur_toit;
-	mais.plans[5].s2.z = c.z;
+	mais.plans[5].point[1] = initialiserPointDeFloat(c.d[0] - taille - (taille*(10./100.)) , c.d[1] + hauteur_murs + hauteur_toit , c.d[2]);
 
-	mais.plans[5].s3.x = c.x - taille - (taille*(10./100.));
-	mais.plans[5].s3.y = c.y + hauteur_murs - (taille*(10./100.));
-	mais.plans[5].s3.z = c.z - taille - (taille*(10./100.));
-
-	mais.plans[5].s4.x = c.x + taille + (taille*(10./100.));
-	mais.plans[5].s4.y = c.y + hauteur_murs - (taille*(10./100.));
-	mais.plans[5].s4.z = c.z - taille - (taille*(10./100.));
+	mais.plans[5].point[2] = initialiserPointDeFloat(c.d[0] - taille - (taille*(10./100.)) , c.d[1] + hauteur_murs - (taille*(10./100.)) , c.d[2] - taille - (taille*(10./100.)));
+		
+	mais.plans[5].point[3] = initialiserPointDeFloat(c.d[0] + taille + (taille*(10./100.)) , c.d[1] + hauteur_murs - (taille*(10./100.)) , c.d[2] - taille - (taille*(10./100.)));
 
 
 
 	//7
-	mais.plans[6].s1.x = c.x - taille - (taille*(10./100.));
-	mais.plans[6].s1.y = c.y + hauteur_murs + hauteur_toit;
-	mais.plans[6].s1.z = c.z;
+	mais.plans[6].point[0] = initialiserPointDeFloat(c.d[0] - taille - (taille*(10./100.)) , c.d[1] + hauteur_murs + hauteur_toit , c.d[2]);
 
-	mais.plans[6].s2.x = c.x + taille + (taille*(10./100.));
-	mais.plans[6].s2.y = c.y + hauteur_murs + hauteur_toit;
-	mais.plans[6].s2.z = c.z;
+	mais.plans[6].point[1] = initialiserPointDeFloat(c.d[0] + taille + (taille*(10./100.)) , c.d[1] + hauteur_murs + hauteur_toit , c.d[2]);
 
-	mais.plans[6].s3.x = c.x + taille + (taille*(10./100.));
-	mais.plans[6].s3.y = c.y + hauteur_murs - (taille*(10./100.));
-	mais.plans[6].s3.z = c.z + taille + (taille*(10./100.));
+	mais.plans[6].point[2] = initialiserPointDeFloat(c.d[0] + taille + (taille*(10./100.)) , c.d[1] + hauteur_murs - (taille*(10./100.)) , c.d[2] + taille + (taille*(10./100.)));
+		
+	mais.plans[6].point[3] = initialiserPointDeFloat(c.d[0] - taille - (taille*(10./100.)) , c.d[1] + hauteur_murs - (taille*(10./100.)) , c.d[2] + taille + (taille*(10./100.)));
 
-	mais.plans[6].s4.x = c.x - taille - (taille*(10./100.));
-	mais.plans[6].s4.y = c.y + hauteur_murs - (taille*(10./100.));
-	mais.plans[6].s4.z = c.z + taille + (taille*(10./100.));
 
 
 
 	//Triangles
-	mais.triangles[0].s1.x = c.x + taille;
-	mais.triangles[0].s1.y = c.y + hauteur_murs + hauteur_toit;
-	mais.triangles[0].s1.z = c.z;
+	//1
+	mais.triangles[0].point[0] = initialiserPointDeFloat(c.d[0] + taille, c.d[1] + hauteur_murs + hauteur_toit , c.d[2]);
 
-	mais.triangles[0].s2.x = c.x + taille;
-	mais.triangles[0].s2.y = c.y + hauteur_murs;
-	mais.triangles[0].s2.z = c.z - taille;
+	mais.triangles[0].point[1] = initialiserPointDeFloat(c.d[0] + taille, c.d[1] + hauteur_murs , c.d[2] - taille);
 
-	mais.triangles[0].s3.x = c.x + taille;
-	mais.triangles[0].s3.y = c.y + hauteur_murs; 
-	mais.triangles[0].s3.z = c.z + taille;
+	mais.triangles[0].point[2] = initialiserPointDeFloat(c.d[0] + taille, c.d[1] + hauteur_murs , c.d[2] + taille);
 
 
+	//2
+	mais.triangles[1].point[0] = initialiserPointDeFloat(c.d[0] - taille, c.d[1] + hauteur_murs + hauteur_toit , c.d[2]);
 
-	mais.triangles[1].s1.x = c.x - taille;
-	mais.triangles[1].s1.y = c.y + hauteur_murs + hauteur_toit;
-	mais.triangles[1].s1.z = c.z;
+	mais.triangles[1].point[1] = initialiserPointDeFloat(c.d[0] - taille, c.d[1] + hauteur_murs , c.d[2] + taille);
 
-	mais.triangles[1].s2.x = c.x - taille;
-	mais.triangles[1].s2.y = c.y + hauteur_murs;
-	mais.triangles[1].s2.z = c.z + taille;
-
-	mais.triangles[1].s3.x = c.x - taille;
-	mais.triangles[1].s3.y = c.y + hauteur_murs;
-	mais.triangles[1].s3.z = c.z - taille;
+	mais.triangles[1].point[2] = initialiserPointDeFloat(c.d[0] - taille, c.d[1] + hauteur_murs , c.d[2] - taille);
 
 	return mais;
 
@@ -180,126 +114,156 @@ maison init_Maison(sommet c, float taille){
 
 
 //Initalisation d'une plateforme par rapport a son centre c et sa taille
-plateforme init_Plateforme(sommet c, float taille){
+plateforme init_Plateforme(point c, float taille){
 
 	plateforme plate;
 	int hauteur_murs = HAUTEUR_PLATEFORME;
 
 
-	//Dessous
-	//1
-	plate.plans[0].s1.x = c.x - taille;
-	plate.plans[0].s1.y = c.y;
-	plate.plans[0].s1.z = c.z + taille;
 
-	plate.plans[0].s2.x = c.x + taille;
-	plate.plans[0].s2.y = c.y;
-	plate.plans[0].s2.z = c.z + taille;
+	plate.plans[0].point[0] = initialiserPointDeFloat(c.d[0] - taille, c.d[1], c.d[2] + taille);
 
-	plate.plans[0].s3.x = c.x + taille;
-	plate.plans[0].s3.y = c.y;
-	plate.plans[0].s3.z = c.z - taille;
+	plate.plans[0].point[1] = initialiserPointDeFloat(c.d[0] + taille, c.d[1], c.d[2] + taille);
 
-	plate.plans[0].s4.x = c.x - taille;
-	plate.plans[0].s4.y = c.y;
-	plate.plans[0].s4.z = c.z - taille;
+	plate.plans[0].point[2] = initialiserPointDeFloat(c.d[0] + taille, c.d[1], c.d[2] - taille);
+
+	plate.plans[0].point[3] = initialiserPointDeFloat(c.d[0] - taille, c.d[1], c.d[2] - taille);
 
 
 	//Cotes
 	//2
-	plate.plans[1].s1.x = c.x - taille;
-	plate.plans[1].s1.y = c.y;
-	plate.plans[1].s1.z = c.z + taille;
+	plate.plans[1].point[0] = initialiserPointDeFloat(c.d[0] - taille, c.d[1], c.d[2] + taille);
 
-	plate.plans[1].s2.x = c.x + taille;
-	plate.plans[1].s2.y = c.y;
-	plate.plans[1].s2.z = c.z + taille;
+	plate.plans[1].point[1] = initialiserPointDeFloat(c.d[0] + taille, c.d[1], c.d[2] + taille);
 
-	plate.plans[1].s3.x = c.x + taille;
-	plate.plans[1].s3.y = c.y + hauteur_murs;
-	plate.plans[1].s3.z = c.z + taille;
-
-	plate.plans[1].s4.x = c.x - taille;
-	plate.plans[1].s4.y = c.y + hauteur_murs;
-	plate.plans[1].s4.z = c.z + taille;
+	plate.plans[1].point[2] = initialiserPointDeFloat(c.d[0] + taille, c.d[1] + hauteur_murs , c.d[2] + taille);
+		
+	plate.plans[1].point[3] = initialiserPointDeFloat(c.d[0] - taille, c.d[1] + hauteur_murs , c.d[2] + taille);
 
 
 
 	//3
-	plate.plans[2].s1.x = c.x + taille;
-	plate.plans[2].s1.y = c.y;
-	plate.plans[2].s1.z = c.z + taille;
+	plate.plans[2].point[0] = initialiserPointDeFloat(c.d[0] + taille, c.d[1], c.d[2] + taille);
 
-	plate.plans[2].s2.x = c.x + taille;
-	plate.plans[2].s2.y = c.y;
-	plate.plans[2].s2.z = c.z - taille;
+	plate.plans[2].point[1] = initialiserPointDeFloat(c.d[0] + taille, c.d[1], c.d[2] - taille);
 
-	plate.plans[2].s3.x = c.x + taille;
-	plate.plans[2].s3.y = c.y + hauteur_murs;
-	plate.plans[2].s3.z = c.z - taille;
+	plate.plans[2].point[2] = initialiserPointDeFloat(c.d[0] + taille, c.d[1] + hauteur_murs , c.d[2] - taille);
+		
+	plate.plans[2].point[3] = initialiserPointDeFloat(c.d[0] + taille, c.d[1] + hauteur_murs , c.d[2] + taille);
 
-	plate.plans[2].s4.x = c.x + taille;
-	plate.plans[2].s4.y = c.y + hauteur_murs;
-	plate.plans[2].s4.z = c.z + taille;
 
 
 
 	//4
-	plate.plans[3].s1.x = c.x + taille;
-	plate.plans[3].s1.y = c.y;
-	plate.plans[3].s1.z = c.z - taille;
+	plate.plans[3].point[0] = initialiserPointDeFloat(c.d[0] + taille, c.d[1], c.d[2] - taille);
 
-	plate.plans[3].s2.x = c.x - taille;
-	plate.plans[3].s2.y = c.y;
-	plate.plans[3].s2.z = c.z - taille;
+	plate.plans[3].point[1] = initialiserPointDeFloat(c.d[0] - taille, c.d[1], c.d[2] - taille);
 
-	plate.plans[3].s3.x = c.x - taille;
-	plate.plans[3].s3.y = c.y + hauteur_murs;
-	plate.plans[3].s3.z = c.z - taille;
+	plate.plans[3].point[2] = initialiserPointDeFloat(c.d[0] - taille, c.d[1] + hauteur_murs , c.d[2] - taille);
+		
+	plate.plans[3].point[3] = initialiserPointDeFloat(c.d[0] + taille, c.d[1] + hauteur_murs , c.d[2] - taille);
 
-	plate.plans[3].s4.x = c.x + taille;
-	plate.plans[3].s4.y = c.y + hauteur_murs;
-	plate.plans[3].s4.z = c.z - taille;
 
 
 
 	//5
-	plate.plans[4].s1.x = c.x - taille;
-	plate.plans[4].s1.y = c.y;
-	plate.plans[4].s1.z = c.z - taille;
+	plate.plans[4].point[0] = initialiserPointDeFloat(c.d[0] - taille, c.d[1], c.d[2] - taille);
 
-	plate.plans[4].s2.x = c.x - taille;
-	plate.plans[4].s2.y = c.y;
-	plate.plans[4].s2.z = c.z + taille;
+	plate.plans[4].point[1] = initialiserPointDeFloat(c.d[0] - taille, c.d[1], c.d[2] + taille);
 
-	plate.plans[4].s3.x = c.x - taille;
-	plate.plans[4].s3.y = c.y + hauteur_murs;
-	plate.plans[4].s3.z = c.z + taille;
+	plate.plans[4].point[2] = initialiserPointDeFloat(c.d[0] - taille, c.d[1] + hauteur_murs , c.d[2] + taille);
+		
+	plate.plans[4].point[3] = initialiserPointDeFloat(c.d[0] - taille, c.d[1] + hauteur_murs , c.d[2] - taille);
+	
 
-	plate.plans[4].s4.x = c.x - taille;
-	plate.plans[4].s4.y = c.y + hauteur_murs;
-	plate.plans[4].s4.z = c.z - taille;
-
-
-
-	//Dessus
+	//Dessus 
 	//6
-	plate.plans[5].s1.x = c.x - taille;
-	plate.plans[5].s1.y = c.y + hauteur_murs;
-	plate.plans[5].s1.z = c.z + taille;
+	plate.plans[4].point[0] = initialiserPointDeFloat(c.d[0] - taille, c.d[1] + hauteur_murs , c.d[2] + taille);
 
-	plate.plans[5].s2.x = c.x + taille;
-	plate.plans[5].s2.y = c.y + hauteur_murs;
-	plate.plans[5].s2.z = c.z + taille;
+	plate.plans[4].point[1] = initialiserPointDeFloat(c.d[0] + taille, c.d[1] + hauteur_murs , c.d[2] + taille);
 
-	plate.plans[5].s3.x = c.x + taille;
-	plate.plans[5].s3.y = c.y + hauteur_murs;
-	plate.plans[5].s3.z = c.z - taille;
-
-	plate.plans[5].s4.x = c.x - taille;
-	plate.plans[5].s4.y = c.y + hauteur_murs;
-	plate.plans[5].s4.z = c.z - taille;
-
+	plate.plans[4].point[2] = initialiserPointDeFloat(c.d[0] + taille, c.d[1] + hauteur_murs , c.d[2] - taille);
+		
+	plate.plans[4].point[3] = initialiserPointDeFloat(c.d[0] - taille, c.d[1] + hauteur_murs , c.d[2] - taille);
+	
 
 	return plate;
+}
+
+
+joueur init_Joueur(point c, float taille){
+	//Ici joueur est un quadirlatere rectangle
+	joueur j;
+
+	//Ici hauteur joueur
+	int hauteur_joueur = HAUTEUR_JOUEUR;
+
+
+	j.plans[0].point[0] = initialiserPointDeFloat(c.d[0] - taille, c.d[1], c.d[2] + taille);
+
+	j.plans[0].point[1] = initialiserPointDeFloat(c.d[0] + taille, c.d[1], c.d[2] + taille);
+
+	j.plans[0].point[2] = initialiserPointDeFloat(c.d[0] + taille, c.d[1], c.d[2] - taille);
+
+	j.plans[0].point[3] = initialiserPointDeFloat(c.d[0] - taille, c.d[1], c.d[2] - taille);
+
+
+	//Cotes
+	//2
+	j.plans[1].point[0] = initialiserPointDeFloat(c.d[0] - taille, c.d[1], c.d[2] + taille);
+
+	j.plans[1].point[1] = initialiserPointDeFloat(c.d[0] + taille, c.d[1], c.d[2] + taille);
+
+	j.plans[1].point[2] = initialiserPointDeFloat(c.d[0] + taille, c.d[1] + hauteur_joueur , c.d[2] + taille);
+		
+	j.plans[1].point[3] = initialiserPointDeFloat(c.d[0] - taille, c.d[1] + hauteur_joueur , c.d[2] + taille);
+
+
+
+	//3
+	j.plans[2].point[0] = initialiserPointDeFloat(c.d[0] + taille, c.d[1], c.d[2] + taille);
+
+	j.plans[2].point[1] = initialiserPointDeFloat(c.d[0] + taille, c.d[1], c.d[2] - taille);
+
+	j.plans[2].point[2] = initialiserPointDeFloat(c.d[0] + taille, c.d[1] + hauteur_joueur , c.d[2] - taille);
+		
+	j.plans[2].point[3] = initialiserPointDeFloat(c.d[0] + taille, c.d[1] + hauteur_joueur , c.d[2] + taille);
+
+
+
+
+	//4
+	j.plans[3].point[0] = initialiserPointDeFloat(c.d[0] + taille, c.d[1], c.d[2] - taille);
+
+	j.plans[3].point[1] = initialiserPointDeFloat(c.d[0] - taille, c.d[1], c.d[2] - taille);
+
+	j.plans[3].point[2] = initialiserPointDeFloat(c.d[0] - taille, c.d[1] + hauteur_joueur , c.d[2] - taille);
+		
+	j.plans[3].point[3] = initialiserPointDeFloat(c.d[0] + taille, c.d[1] + hauteur_joueur , c.d[2] - taille);
+
+
+
+
+	//5
+	j.plans[4].point[0] = initialiserPointDeFloat(c.d[0] - taille, c.d[1], c.d[2] - taille);
+
+	j.plans[4].point[1] = initialiserPointDeFloat(c.d[0] - taille, c.d[1], c.d[2] + taille);
+
+	j.plans[4].point[2] = initialiserPointDeFloat(c.d[0] - taille, c.d[1] + hauteur_joueur , c.d[2] + taille);
+		
+	j.plans[4].point[3] = initialiserPointDeFloat(c.d[0] - taille, c.d[1] + hauteur_joueur , c.d[2] - taille);
+	
+
+	//Dessus 
+	//6
+	j.plans[4].point[0] = initialiserPointDeFloat(c.d[0] - taille, c.d[1] + hauteur_joueur , c.d[2] + taille);
+
+	j.plans[4].point[1] = initialiserPointDeFloat(c.d[0] + taille, c.d[1] + hauteur_joueur , c.d[2] + taille);
+
+	j.plans[4].point[2] = initialiserPointDeFloat(c.d[0] + taille, c.d[1] + hauteur_joueur , c.d[2] - taille);
+		
+	j.plans[4].point[3] = initialiserPointDeFloat(c.d[0] - taille, c.d[1] + hauteur_joueur , c.d[2] - taille);
+
+
+	return j;
 }

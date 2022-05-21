@@ -3,13 +3,13 @@
 
 
 //Trace un plan sur la fenetre
-void trace_Plan(plan p, couleur c){
+void trace_Plan(plan pl, couleur c){
 	glBegin(GL_QUADS);
 	glColor3f(c.r, c.g, c.b);
-	glVertex3f(p.s1.x, p.s1.y, p.s1.z);
-	glVertex3f(p.s2.x, p.s2.y, p.s2.z);
-	glVertex3f(p.s3.x, p.s3.y, p.s3.z);
-	glVertex3f(p.s4.x, p.s4.y, p.s4.z);
+	glVertex3f(pl.point[0].d[0], pl.point[0].d[1], pl.point[0].d[2]);
+	glVertex3f(pl.point[1].d[0], pl.point[1].d[1], pl.point[1].d[2]);
+	glVertex3f(pl.point[2].d[0], pl.point[2].d[1], pl.point[2].d[2]);
+	glVertex3f(pl.point[3].d[0], pl.point[3].d[1], pl.point[3].d[2]);
 	glEnd();
 }
 
@@ -19,9 +19,9 @@ void trace_Plan(plan p, couleur c){
 void trace_Triangle(triangle t, couleur c){
 	glBegin(GL_TRIANGLES);
 	glColor3f(c.r, c.g, c.b);
-	glVertex3f(t.s1.x, t.s1.y, t.s1.z);
-	glVertex3f(t.s2.x, t.s2.y, t.s2.z);
-	glVertex3f(t.s3.x, t.s3.y, t.s3.z);
+	glVertex3f(t.point[0].d[0], t.point[0].d[1], t.point[0].d[2]);
+	glVertex3f(t.point[1].d[0], t.point[1].d[1], t.point[1].d[2]);
+	glVertex3f(t.point[2].d[0], t.point[2].d[1], t.point[2].d[2]);
 	glEnd();
 }
 
@@ -36,6 +36,7 @@ void trace_Plateforme(plateforme plat){
 	c.b = 1;
 
 	for(i = 0; i<(int)(sizeof(plat.plans)/sizeof(plat.plans[0])); i++){
+		//On change la couleur a chaques itérations
 		c.r -= 0.1;
 		c.g -= 0.1;
 		c.b -= 0.1;
@@ -52,7 +53,7 @@ void trace_Maison(maison mais){
 	c.r = 1;
 	c.g = 1;
 	c.b = 1;
-
+	//On change la couleur a chaques itérations
 	for(i = 0; i<(int)(sizeof(mais.plans)/sizeof(mais.plans[0])); i++){
 		c.r -= 0.1;
 		c.g -= 0.1;
@@ -63,6 +64,7 @@ void trace_Maison(maison mais){
 	c.r = 1;
 	c.g = 0;
 	c.b = 0;
+	//On change la couleur a chaques itérations
 	for(i = 0; i<(int)(sizeof(mais.triangles)/sizeof(mais.triangles[0])); i++){
 		trace_Triangle(mais.triangles[i], c);
 	}
@@ -86,4 +88,3 @@ void trace_Origine(){
 
   glEnd();
 }
-

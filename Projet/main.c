@@ -14,11 +14,11 @@ float sensitivite = 0.005;
 //Position de l'observateur (endroit) (-50,10,0)
 point posEye;
 //Direction vers laquelle l'observateur regarde (vecteur) (1,0,0)  pour pouvoir marcher droit ou reculer
-point dirEye;
+vecteur dirEye;
 //Direction Orthogonale a celle vers laquelle l'observateur regarde (vecteur) (0,0,1)  pour pouvoir marcher sur les cotes
-point orthoDirEye;
+vecteur orthoDirEye;
 //Direction vers le haut pour la tete (vecteur) (0,1,0)
-point upEye;
+vecteur upEye;
 
 
 float avant = 0;
@@ -40,7 +40,7 @@ float angleRoulis=0,angleLacet=0;
 
 
 //Sommet de centre de fenetre (0,0,0)
-sommet centre;
+point centre;
 //Une maison
 maison mais;
 // Une plateforme
@@ -96,12 +96,10 @@ void animer(){
 //Fonction pour initialiser toutes les structures (maisons,plateformes...) dans la fenetre 
 //(NB faire des listes de ces structures)
 void intialiser_Structures(){
-  centre.x = 0;
-  centre.y = 0;
-  centre.z = 0;
+  centre = initialiserPointDeFloat(0,0,0);
 
   mais = init_Maison(centre, TAILLE_STRUC);
-  centre.y = 0 - HAUTEUR_PLATEFORME;
+  centre.d[1] = 0 - HAUTEUR_PLATEFORME; //On baisse le y pour que la plateforme soit plus bas
   plate = init_Plateforme(centre, 70);
 }
 
@@ -195,6 +193,20 @@ void gererUpClavier(unsigned char touche, int x, int y){
 /************************************************************************/
 void mouvementSouris(int xPos, int yPos) {
 
+  if(xPos >= FENX-5){
+    glutWarpPointer(10,yPos);
+  }
+  else if(xPos <= 5){
+    glutWarpPointer(FENX-10,yPos);
+  }
+
+  if(yPos >= FENY-5){
+    glutWarpPointer(xPos,10);
+  }
+  else if(yPos <= 5){
+    glutWarpPointer(xPos,FENY-10);
+  }
+
   xSouris = (float)xPos - dernierX;
   ySouris = dernierY - (float)yPos;
 
@@ -214,7 +226,7 @@ void mouvementSouris(int xPos, int yPos) {
     angleLacet = -89.0;
 
 
-  point direction;
+  vecteur direction;
 
   direction.d[0] = cos(angleRoulis) * cos(angleLacet);
   direction.d[1] = sin(angleLacet);
@@ -223,9 +235,9 @@ void mouvementSouris(int xPos, int yPos) {
   dirEye = normalise(direction);
 }
 
-void bouttonSouris(int button, int state, int x, int y) {
+// void bouttonSouris(int button, int state, int x, int y) {
 
-}
+// }
 
 
 
@@ -241,10 +253,10 @@ int main(int argc, char *argv[]){
   /********** Init de Glut ********/
 
 
-  posEye = initialiserPointDeFloat(-50,10,0);
-  dirEye = initialiserPointDeFloat(1,0,0);
-  orthoDirEye = initialiserPointDeFloat(0,0,0);
-  upEye = initialiserPointDeFloat(0,1,0);
+  posEye = initialiserPointDeFloat(-50,HAUTEUR_JOUEUR,0);
+  dirEye = initialiserVecteurDeFloat(1,0,0);
+  orthoDirEye = initialiserVecteurDeFloat(0,0,0);
+  upEye = initialiserVecteurDeFloat(0,1,0);
 
 
   glutInit(&argc,argv);
@@ -264,7 +276,7 @@ int main(int argc, char *argv[]){
   glutKeyboardUpFunc(gererUpClavier);
 
   // Gestion de la souris
-  glutMouseFunc(bouttonSouris);
+  //glutMouseFunc(bouttonSouris);
   glutPassiveMotionFunc(mouvementSouris);
 
   glutMainLoop();
