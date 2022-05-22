@@ -157,7 +157,7 @@ matrice genereRAutourY(float angle){
 
 matrice genereRAutourZ(float angle){
 	matrice mR;
-	mR = initialiserMatrice(mR);
+	mR = initialiserMatrice();
 
 	mR.d[0][0] = cos(angle);
 	mR.d[0][1] = -sin(angle);
@@ -169,6 +169,25 @@ matrice genereRAutourZ(float angle){
 	return mR;
 }
 
+
+matrice genereRAutourVec(float angle, vecteur vec){
+  matrice mR;
+  mR = initialiserMatriceDeFloat( ((vec.d[0]*vec.d[0])*(1-cos(angle))) +cos(angle) , ((vec.d[0]*vec.d[1])*(1-cos(angle))) -vec.d[2]*sin(angle) , ((vec.d[0]*vec.d[2])*(1-cos(angle))) +vec.d[1]*sin(angle),
+
+                                  ((vec.d[0]*vec.d[1])*(1-cos(angle))) +vec.d[2]*sin(angle) , ((vec.d[1]*vec.d[1])*(1-cos(angle))) +cos(angle) , ((vec.d[1]*vec.d[2])*(1-cos(angle))) -vec.d[0]*sin(angle),
+
+                                  ((vec.d[0]*vec.d[2])*(1-cos(angle))) -vec.d[1]*sin(angle) , ((vec.d[1]*vec.d[2])*(1-cos(angle))) +vec.d[0]*sin(angle) , ((vec.d[2]*vec.d[2])*(1-cos(angle))) +cos(angle)
+                                  );
+  return mR;
+}
+
+
+
+
+vecteur vecAvec2points(point p1, point p2){
+  vecteur v = initialiserVecteurDeFloat(p1.d[0]-p2.d[0],p1.d[1]-p2.d[1],p1.d[2]-p2.d[2]);
+  return v;
+}
 
 
 vecteur produitScalaire(vecteur p1, vecteur p2){

@@ -368,8 +368,8 @@ bonus init_bonus(point c, float taille){
 	bonus bon;
 	int hauteur_murs = taille;
 
-	bon.centre = c;
 	c.d[1] += 15;
+	bon.centre = c;
 
 	//Dessous
 	//1

@@ -19,6 +19,7 @@ joueur mise_echelle_joueur(joueur jou, float x,float y, float z);
 bonus translation_bonus(bonus bon, point po);
 bonus mise_echelle_bonus(bonus bon, float x,float y, float z);
 bonus rotation_bonus(bonus bon,char axe, float angle);
+bonus rotation_bonus_vec(bonus bon, float angle, vecteur vec);
 
 arbre translation_arbre(arbre ab, point po);
 arbre mise_echelle_arbre(arbre ab, float x,float y, float z);

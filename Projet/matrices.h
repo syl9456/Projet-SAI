@@ -30,6 +30,7 @@ matrice genereT(float x,float y, float z);
 matrice genereRAutourX(float angle);
 matrice genereRAutourY(float angle);
 matrice genereRAutourZ(float angle);
+matrice genereRAutourVec(float angle, vecteur vec);
 
 matrice multiplicationMatrice(matrice m1, matrice m2);
 point multiplicationMatricePoint(matrice m1, point p2);
@@ -37,6 +38,7 @@ vecteur multiplicationMatriceVecteur(matrice m1, vecteur p2);
 void afficheMatrice(matrice m);
 void affichePoint(point p);
 
+vecteur vecAvec2points(point p1, point p2);
 vecteur produitScalaire(vecteur p1, vecteur p2);
 vecteur normalise(vecteur p);
 vecteur soustraction(vecteur p1, vecteur p2);

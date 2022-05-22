@@ -54,6 +54,8 @@ maison maisons[20];
 arbre arbres[120];
 bonus bonuses[30];
 
+float angleBonus = 0;
+
 
 
 
@@ -112,6 +114,7 @@ void  initialiser_bonuses(){
     bonuses[i] = translation_bonus(bonuses[i],p);
     p.d[0] -= 50;
   }
+
 }
 
 void  initialiser_plateformes(){
@@ -218,11 +221,24 @@ void calculeOrtho(){
   orthoDirEye = normalise(produitScalaire(upEye,dirEye));
 }
 
+void animation_bonuses(){
+  point pvec;
+  vecteur vec;
+  for(int i = 0; i<(int)(sizeof(bonuses)/sizeof(bonus)); i++){
+    pvec = bonuses[i].centre;
+    pvec.d[1] +=  1;
+    vec = vecAvec2points(bonuses[i].centre,pvec);
+    bonuses[i] = rotation_bonus_vec(bonuses[i],angleBonus,vec);
+  }
+  angleBonus += 0.0001;
+}
+
 
 
 
 //Fonction pour raffraichir la fenetre (encore rien fait de plus que le tp)
 void animer(){
+  animation_bonuses();
   calculeOrtho();
   //calculeCollision();
 
