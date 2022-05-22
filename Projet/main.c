@@ -1,8 +1,25 @@
 #include "setup.h"
 #include "init.h"
 #include "affichage.h"
+#include "collision.h"
 #include "matrices.h"
 #include "mouvementsFormes.h"
+
+
+// Listing des elements et de leur nombre sur la scene
+
+#define nbPlateformes 30
+#define nbMaisons 20 
+#define nbArbres 20 
+#define nbBonus 20 
+
+/*
+  Tableaux des elements de la scene
+*/
+plateforme plateformes[nbPlateformes];
+maison maisons[nbMaisons];
+arbre arbres[nbArbres];
+bonus bonuses[nbBonus];
 
 //Variables de vitesse de camera
 float vitesseCamera = 1;
@@ -49,10 +66,8 @@ plateforme base;
 joueur jou;
 
 
-plateforme plateformes[30];
-maison maisons[20];
-arbre arbres[120];
-bonus bonuses[30];
+
+
 
 float angleBonus = 0;
 
@@ -66,12 +81,30 @@ float angleBonus = 0;
 /************************************************************************/
 
 
+void initialiser_Base(){
+  point p = centre;
+  p.d[1] -= HAUTEUR_PLATEFORME+1;
+  base = init_plateforme(p, 200);
+}
+
+
+void  initialiser_plateformes(){
+  point p = centre;
+  p.d[2] -= 50;
+  for(int i = 0; i<nbPlateformes; i++){
+    plateformes[i] = init_plateforme(centre, 10);
+    plateformes[i] = translation_plateforme(plateformes[i],p);
+    p.d[2] -= 0;
+  }
+}
+
+
 void  initialiser_Maisons(){
   float angle = 0;
 
   point p = centre;
   p.d[0] -= 100;
-  for(int i = 0; i<(int)(sizeof(maisons)/sizeof(maison)); i++){
+  for(int i = 0; i<nbMaisons; i++){
     if(i%5 == 0){
       p.d[2] -= 100;
       p.d[0] = centre.d[0]-100; 
@@ -90,7 +123,7 @@ void  initialiser_Arbres(){
 
   srand(getpid());
   point p = centre;
-  for(int i = 0; i<(int)(sizeof(arbres)/sizeof(arbre)); i++){
+  for(int i = 0; i<nbArbres; i++){
     x = rand()%1001;
     y = rand()%1001;
 
@@ -109,7 +142,7 @@ void  initialiser_Arbres(){
 void  initialiser_bonuses(){
   point p = centre;
   p.d[0] -= 50;
-  for(int i = 0; i<(int)(sizeof(bonuses)/sizeof(bonus)); i++){
+  for(int i = 0; i<nbBonus; i++){
     bonuses[i] = init_bonus(centre, 3);
     bonuses[i] = translation_bonus(bonuses[i],p);
     p.d[0] -= 50;
@@ -117,15 +150,6 @@ void  initialiser_bonuses(){
 
 }
 
-void  initialiser_plateformes(){
-  point p = centre;
-  p.d[2] -= 50;
-  for(int i = 0; i<(int)(sizeof(plateformes)/sizeof(plateforme)); i++){
-    plateformes[i] = init_plateforme(centre, 10);
-    plateformes[i] = translation_plateforme(plateformes[i],p);
-    p.d[2] -= 50;
-  }
-}
 
 
 void initialiser_Spirale(){
@@ -135,7 +159,7 @@ void initialiser_Spirale(){
   float distance = 0;
   float ajoutDistance = 5;
 
-  for(int i = 0; i<(int)(sizeof(plateformes)/sizeof(plateforme)); i++){
+  for(int i = 0; i< nbPlateformes; i++){
     plateformes[i] = init_plateforme(centre, 10);
     bonuses[i] = init_bonus(centre,2);
 
@@ -154,11 +178,6 @@ void initialiser_Spirale(){
 }
 
 
-void initialiser_Base(){
-  point p = centre;
-  p.d[1] -= HAUTEUR_PLATEFORME+1;
-  base = init_plateforme(p, 1000);
-}
 
 
 
@@ -211,9 +230,20 @@ void trace_Arbres(){
   }
 }
 
+/************************************************************************/
 
+//                      COLLISIONS TABLEAU OBSTACLE
 
+/************************************************************************/
 
+int colTabMaisons(point posJoueur){
+  for(int i = 0; i<nbMaisons; i++){
+    if(colMaison(posJoueur, maisons[i])){
+      return 1;
+    }
+  }
+  return 0;
+}
 
 //Calcule ici dirEyeOrtho en fonction de UpEye et de DirEye
 //Pour cela il faut que Up soit definit et ensuite on fait un produit scalaire et on normalise
@@ -224,7 +254,7 @@ void calculeOrtho(){
 void animation_bonuses(){
   point pvec;
   vecteur vec;
-  for(int i = 0; i<(int)(sizeof(bonuses)/sizeof(bonus)); i++){
+  for(int i = 0; i<nbBonus; i++){
     pvec = bonuses[i].centre;
     pvec.d[1] +=  1;
     vec = vecAvec2points(bonuses[i].centre,pvec);
@@ -242,15 +272,27 @@ void animer(){
   calculeOrtho();
   //calculeCollision();
 
+  float x,y,z;
+
+  x = posEye.d[0];
+  y = posEye.d[1];
+  z = posEye.d[2];
+
   if(avant){
-    posEye.d[0] += avant * vitesseCamera * dirEye.d[0];
-    posEye.d[1] += avant * vitesseCamera * dirEye.d[1];
-    posEye.d[2] += avant * vitesseCamera * dirEye.d[2];
+    x += avant * vitesseCamera * dirEye.d[0];
+    //y += avant * vitesseCamera * dirEye.d[1];
+    z += avant * vitesseCamera * dirEye.d[2];
   }
   if(cotes){
-    posEye.d[0] += cotes * vitesseCamera *  orthoDirEye.d[0];
-    posEye.d[1] += cotes * vitesseCamera *  orthoDirEye.d[1];
-    posEye.d[2] += cotes * vitesseCamera *  orthoDirEye.d[2];
+    x += cotes * vitesseCamera *  orthoDirEye.d[0];
+    //y += cotes * vitesseCamera *  orthoDirEye.d[1];
+    z += cotes * vitesseCamera *  orthoDirEye.d[2];
+  }
+
+  if(colTabMaisons(initialiserPointDeFloat(x,y,z))==0){
+    posEye.d[0] = x;
+    posEye.d[1] = y;
+    posEye.d[2] = z;
   }
 
   if(avant || cotes){
@@ -393,6 +435,7 @@ void mouvementSouris(int xPos, int yPos) {
   direction.d[2] = sin(angleRoulis) * cos(angleLacet);
 
   dirEye = normalise(direction);
+
 }
 
 // void bouttonSouris(int button, int state, int x, int y) {
