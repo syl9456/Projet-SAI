@@ -6,6 +6,7 @@
 void trace_Plan(plan p, couleur c);
 void trace_Triangle(triangle t, couleur c);
 void trace_Plateforme(plateforme plat);
+void trace_Joueur(joueur jou);
 void trace_Maison(maison maison);
 void trace_Origine();
 

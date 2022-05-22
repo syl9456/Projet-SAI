@@ -2,10 +2,10 @@
 #include "init.h"
 #include "affichage.h"
 #include "matrices.h"
-
+#include "mouvementsFormes.h"
 
 //Variables de vitesse de camera
-float vitesseCamera = 0.3;
+float vitesseCamera = 1;
 
 float sensitivite = 0.005;
 
@@ -44,16 +44,136 @@ point centre;
 //Une maison
 maison mais;
 // Une plateforme
-plateforme plate;
+plateforme base;
+// Un joueur
+joueur jou;
 
 
-//plateforme plateformes[]
-//maison maisons[]
+plateforme plateformes[30];
+maison maisons[20];
+arbre arbres[120];
+bonus bonuses[30];
+
+
+
+
+/************************************************************************/
+
+//                      INITIALISATIONS
+
+/************************************************************************/
+
+
+void  initialiser_Maisons(){
+  float angle = 0;
+
+  point p = centre;
+  p.d[0] -= 100;
+  for(int i = 0; i<(int)(sizeof(maisons)/sizeof(maison)); i++){
+    if(i%5 == 0){
+      p.d[2] -= 100;
+      p.d[0] = centre.d[0]-100; 
+    }
+    maisons[i] = init_maison(centre, 20);
+    maisons[i] = rotation_maison(maisons[i],'y',angle);
+    maisons[i] = translation_maison(maisons[i],p);
+    p.d[0] -= 100;
+    angle += 15;
+  }
+}
+
+void  initialiser_Arbres(){
+  float angle = 0;
+  int x,y;
+
+  srand(getpid());
+  point p = centre;
+  for(int i = 0; i<(int)(sizeof(arbres)/sizeof(arbre)); i++){
+    x = rand()%1001;
+    y = rand()%1001;
+
+    p.d[0] = (float)x;
+    p.d[2] = (float)y;
+
+    arbres[i] = init_arbre(centre, 5);
+    arbres[i] = rotation_arbre(arbres[i],'y',angle);
+    arbres[i] = translation_arbre(arbres[i],p);
+    angle += 15;
+  }
+
+
+}
+
+void  initialiser_bonuses(){
+  point p = centre;
+  p.d[0] -= 50;
+  for(int i = 0; i<(int)(sizeof(bonuses)/sizeof(bonus)); i++){
+    bonuses[i] = init_bonus(centre, 3);
+    bonuses[i] = translation_bonus(bonuses[i],p);
+    p.d[0] -= 50;
+  }
+}
+
+void  initialiser_plateformes(){
+  point p = centre;
+  p.d[2] -= 50;
+  for(int i = 0; i<(int)(sizeof(plateformes)/sizeof(plateforme)); i++){
+    plateformes[i] = init_plateforme(centre, 10);
+    plateformes[i] = translation_plateforme(plateformes[i],p);
+    p.d[2] -= 50;
+  }
+}
+
+
+void initialiser_Spirale(){
+  point p;
+  float angle = 0;
+  float ajoutAngle = 5;
+  float distance = 0;
+  float ajoutDistance = 5;
+
+  for(int i = 0; i<(int)(sizeof(plateformes)/sizeof(plateforme)); i++){
+    plateformes[i] = init_plateforme(centre, 10);
+    bonuses[i] = init_bonus(centre,2);
+
+
+    p.d[0] = cos(angle)* distance;
+    p.d[1] += 10;
+    p.d[2] = sin(angle)*distance;
+
+    plateformes[i] = rotation_plateforme(plateformes[i],'y',angle);
+    plateformes[i] = translation_plateforme(plateformes[i],p);
+    bonuses[i] = translation_bonus(bonuses[i],p);
+
+    distance += ajoutDistance;
+    angle += ajoutAngle;
+  }
+}
+
+
+void initialiser_Base(){
+  point p = centre;
+  p.d[1] -= HAUTEUR_PLATEFORME+1;
+  base = init_plateforme(p, 1000);
+}
 
 
 
 
 
+
+
+
+//Fonction pour initialiser toutes les structures (maisons,plateformes...) dans la fenetre 
+//(NB faire des listes de ces structures)
+void intialiser_Structures(){
+  centre = initialiserPointDeFloat(0,0,0);
+
+  initialiser_Spirale();
+  initialiser_Arbres();
+  initialiser_Base();
+  initialiser_Maisons();
+}
 
 
 
@@ -62,6 +182,35 @@ plateforme plate;
 //                      AFFICHAGE
 
 /************************************************************************/
+
+
+
+
+void trace_Maisons(){
+  for(int i = 0; i<(int)(sizeof(maisons)/sizeof(maison)); i++){
+    trace_Maison(maisons[i]);
+  }
+}
+void trace_Plateformes(){
+  for(int i = 0; i<(int)(sizeof(plateformes)/sizeof(plateforme)); i++){
+    trace_Plateforme(plateformes[i]);
+  }
+}
+
+void trace_Bonuses(){
+  for(int i = 0; i<(int)(sizeof(bonuses)/sizeof(bonus)); i++){
+    trace_Bonus(bonuses[i]);
+  }
+} 
+void trace_Arbres(){
+  for(int i = 0; i<(int)(sizeof(arbres)/sizeof(arbre)); i++){
+    trace_Arbre(arbres[i]);
+  }
+}
+
+
+
+
 
 //Calcule ici dirEyeOrtho en fonction de UpEye et de DirEye
 //Pour cela il faut que Up soit definit et ensuite on fait un produit scalaire et on normalise
@@ -75,6 +224,7 @@ void calculeOrtho(){
 //Fonction pour raffraichir la fenetre (encore rien fait de plus que le tp)
 void animer(){
   calculeOrtho();
+  //calculeCollision();
 
   if(avant){
     posEye.d[0] += avant * vitesseCamera * dirEye.d[0];
@@ -87,21 +237,13 @@ void animer(){
     posEye.d[2] += cotes * vitesseCamera *  orthoDirEye.d[2];
   }
 
+  if(avant || cotes){
+    jou = translation_joueur(jou,posEye);
+  }
 
   glutPostRedisplay();
 }
 
-
-
-//Fonction pour initialiser toutes les structures (maisons,plateformes...) dans la fenetre 
-//(NB faire des listes de ces structures)
-void intialiser_Structures(){
-  centre = initialiserPointDeFloat(0,0,0);
-
-  mais = init_Maison(centre, TAILLE_STRUC);
-  centre.d[1] = 0 - HAUTEUR_PLATEFORME; //On baisse le y pour que la plateforme soit plus bas
-  plate = init_Plateforme(centre, 70);
-}
 
 
 //Fonction principale d'affichage, Ici on apelle que des focntions de tracage je pense
@@ -124,15 +266,16 @@ void affichage(){
             upEye.d[2]);
 
   trace_Origine();
-  trace_Maison(mais);
-  trace_Plateforme(plate);
+  trace_Maisons();
+  trace_Plateformes();
+  trace_Bonuses();
+  trace_Arbres();
+  trace_Plateforme(base);
+  trace_Joueur(jou);
 
 
   glutSwapBuffers();
 }
-
-
-
 
 
 
@@ -165,6 +308,7 @@ void gererClavier(unsigned char touche, int x, int y){
       break;
   }
 }
+
 
 //Si une des touches du clavier est relevée on met le multiplicateur de la direction (avant/cotes) a 0
 void gererUpClavier(unsigned char touche, int x, int y){
@@ -253,7 +397,7 @@ int main(int argc, char *argv[]){
   /********** Init de Glut ********/
 
 
-  posEye = initialiserPointDeFloat(-50,HAUTEUR_JOUEUR,0);
+  posEye = initialiserPointDeFloat(-50,10,0);
   dirEye = initialiserVecteurDeFloat(1,0,0);
   orthoDirEye = initialiserVecteurDeFloat(0,0,0);
   upEye = initialiserVecteurDeFloat(0,1,0);

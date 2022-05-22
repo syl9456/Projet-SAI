@@ -26,22 +26,91 @@ void trace_Triangle(triangle t, couleur c){
 }
 
 
+void trace_Boule(boule bou, couleur c){
+	glColor3f(c.r, c.g, c.b);
+	glTranslatef(bou.centre.d[0],bou.centre.d[1],bou.centre.d[2]);
+  glutSolidSphere(bou.rayon,20,20);
+  glTranslatef(-bou.centre.d[0],-bou.centre.d[1],-bou.centre.d[2]);
+}
+
+
+
 
 //Trace la plateforme sur la fenetre
 void trace_Plateforme(plateforme plat){
+	int i;
+	couleur c;
+	c.r = 0.43;
+	c.g = 0.3;
+	c.b = 0.3;
+
+	for(i = 0; i<(int)(sizeof(plat.plans)/sizeof(plat.plans[0]))-1; i++){
+		//On change la couleur a chaques itérations
+		c.r -= 0.03;
+		c.g -= 0.03;
+		c.b -= 0.03;
+		trace_Plan(plat.plans[i], c);
+	}
+
+	c.r = 0.05;
+	c.g = 0.45;
+	c.b = 0.05;
+	trace_Plan(plat.plans[i], c);
+}
+
+//Trace la plateforme sur la fenetre
+void trace_Joueur(joueur jou){
 	int i;
 	couleur c;
 	c.r = 1;
 	c.g = 1;
 	c.b = 1;
 
-	for(i = 0; i<(int)(sizeof(plat.plans)/sizeof(plat.plans[0])); i++){
+	for(i = 0; i<(int)(sizeof(jou.plans)/sizeof(jou.plans[0])); i++){
 		//On change la couleur a chaques itérations
-		c.r -= 0.1;
-		c.g -= 0.1;
-		c.b -= 0.1;
-		trace_Plan(plat.plans[i], c);
+		c.r -= 0.08;
+		c.g -= 0.08;
+		c.b -= 0.08;
+		trace_Plan(jou.plans[i], c);
 	}
+}
+
+void trace_Bonus(bonus bon){
+	int i;
+	couleur c;
+	c.r = 1;
+	c.g = 0.42;
+	c.b = 0.61;
+
+	for(i = 0; i<(int)(sizeof(bon.plans)/sizeof(bon.plans[0])); i++){
+		//On change la couleur a chaques itérations
+		c.r -= 0.03;
+		c.g -= 0.03;
+		c.b -= 0.03;
+		trace_Plan(bon.plans[i], c);
+	}
+}
+
+
+void trace_Arbre(arbre ab){
+	int i;
+	couleur c;
+	c.r = 0.43;
+	c.g = 0.3;
+	c.b = 0.3;
+
+	for(i = 0; i<(int)(sizeof(ab.plans)/sizeof(ab.plans[0])); i++){
+		//On change la couleur a chaques itérations
+		c.r -= 0.03;
+		c.g -= 0.03;
+		c.b -= 0.03;
+		trace_Plan(ab.plans[i], c);
+	}
+
+	c.r = 0;
+	c.g = 0.5;
+	c.b = 0;
+	trace_Boule(ab.feuilles, c);
 }
 
 
@@ -55,9 +124,9 @@ void trace_Maison(maison mais){
 	c.b = 1;
 	//On change la couleur a chaques itérations
 	for(i = 0; i<(int)(sizeof(mais.plans)/sizeof(mais.plans[0])); i++){
-		c.r -= 0.1;
-		c.g -= 0.1;
-		c.b -= 0.1;
+		c.r -= 0.08;
+		c.g -= 0.08;
+		c.b -= 0.08;
 		trace_Plan(mais.plans[i], c);
 	}
 

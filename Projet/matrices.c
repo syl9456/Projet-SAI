@@ -127,7 +127,7 @@ matrice genereS(float x, float y, float z){
 //Genere la matrice de rotation autour de l'axe y, On considere ici que l'objet tourne autour de l'origine
 matrice genereRAutourX(float angle){
 	matrice mR;
-	initialiserMatrice(mR);
+	mR = initialiserMatrice();
 
 	mR.d[1][1] = cos(angle);
 	mR.d[1][2] = -sin(angle);
@@ -142,7 +142,7 @@ matrice genereRAutourX(float angle){
 
 matrice genereRAutourY(float angle){
 	matrice mR;
-	initialiserMatrice(mR);
+	mR = initialiserMatrice();
 
 	mR.d[0][0] = cos(angle);
 	mR.d[0][2] = sin(angle);
@@ -151,14 +151,13 @@ matrice genereRAutourY(float angle){
 
   mR.d[1][1] = 1.0;
 
-
 	return mR;
 }
 
 
 matrice genereRAutourZ(float angle){
 	matrice mR;
-	initialiserMatrice(mR);
+	mR = initialiserMatrice(mR);
 
 	mR.d[0][0] = cos(angle);
 	mR.d[0][1] = -sin(angle);

@@ -1,4 +1,4 @@
-CFLAGS=-W -Wall -Wextra
+CFLAGS=-W -Wall 
 LDFLAGS = -lglut -lGLU -lGL -lm
 EXEC = apli
 

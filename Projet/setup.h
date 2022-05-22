@@ -8,7 +8,7 @@
 #include <stdarg.h>
 #include "GL/gl.h"
 #include "GL/glut.h"
-#include "time.h"
+#include <time.h>
 #include <math.h>
 
 
@@ -17,11 +17,13 @@
 
 #define HAUTEUR_PLATEFORME 10
 #define HAUTEUR_MAISON 20
+#define HAUTEUR_ARBRE 30
+
 #define TAILLE_STRUC 20
 
-#define HAUTEUR_JOUEUR 10
 
 #define PI 3.141592 
+
 
 
 
@@ -41,6 +43,16 @@ typedef struct plan{
 	point point[4];
 }plan;
 
+typedef struct boule{
+	point centre;
+	float rayon;
+}boule;
+
+typedef struct bonus{
+	point centre;
+	plan plans[6];
+}bonus;
+
 //Un triangle est construit avec 3 points
 typedef struct triangle{
 	point point[3];
@@ -52,6 +64,12 @@ typedef struct maison{
 	plan plans[7];
 	triangle triangles[2];
 }maison;
+
+typedef struct arbre{
+	point centre;
+	plan plans[6];
+	boule feuilles;
+}arbre;
 
 //Une plateforme est en fait un paralepipede rectangle donc il a 6 plans
 typedef struct plateforme{
