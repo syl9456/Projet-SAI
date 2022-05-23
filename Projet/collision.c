@@ -144,10 +144,11 @@ point cherchePlusLoinArbre(arbre a, point origine){
 int colMaison(point posJoueur, point plusProche, point plusLoin){
 	// Heureusement que la maison est un cube
 
-	printf("Plus Proche:");
+	/*printf("Plus Proche:");
 	affichePoint(plusProche);
 	printf("Plus Loin:");
 	affichePoint(plusLoin);
+	*/
 
 	// Verfie interiorité du cube
 	if(posJoueur.d[0] >= plusProche.d[0]  &&

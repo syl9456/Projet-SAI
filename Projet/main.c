@@ -72,11 +72,7 @@ plateforme base;
 joueur jou;
 
 
-
-<<<<<<< HEAD
-=======
 int montrerCollision = 0;
->>>>>>> f829464d8151aca027dff952e104090659013979
 float angleBonus = 0;
 
 
@@ -429,7 +425,7 @@ void affichage(){
   e.basG = centre;
   e.hautD = p123;
 
-  trace_escalier(e);
+  trace_escalier(e,3);
 
 
 
@@ -566,7 +562,7 @@ void mouvementSouris(int xPos, int yPos) {
 int main(int argc, char *argv[]){
   /********** Init de Glut ********/
 
-  p123 = initialiserPointDeFloat(5,5,5);
+  p123 = initialiserPointDeFloat(10,10,10);
   posEye = initialiserPointDeFloat(-50,10,0);
   dirEye = initialiserVecteurDeFloat(1,0,0);
   orthoDirEye = initialiserVecteurDeFloat(0,0,0);
