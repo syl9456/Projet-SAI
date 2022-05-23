@@ -37,11 +37,14 @@ point multiplicationMatricePoint(matrice m1, point p2);
 vecteur multiplicationMatriceVecteur(matrice m1, vecteur p2);
 void afficheMatrice(matrice m);
 void affichePoint(point p);
+void afficheVecteur(vecteur v);
 
 vecteur vecAvec2points(point p1, point p2);
 vecteur produitScalaire(vecteur p1, vecteur p2);
 vecteur normalise(vecteur p);
 vecteur soustraction(vecteur p1, vecteur p2);
 vecteur addition(vecteur p1, vecteur p2);
+
+float distance(point p1, point p2);
 
 #endif

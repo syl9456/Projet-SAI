@@ -20,7 +20,7 @@ mouvementsFormes.o : mouvementsFormes.c setup.h matrices.h
 affichage.o : affichage.c affichage.h setup.h
 	gcc -o affichage.o -c affichage.c $(CFLAGS)
 
-collision.o : collision.c collision.h setup.h
+collision.o : collision.c collision.h setup.h affichage.h matrices.h
 	gcc -o collision.o -c collision.c $(CFLAGS)
 
 

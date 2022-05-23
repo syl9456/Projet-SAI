@@ -1,7 +1,6 @@
 #include "affichage.h"
 
 
-
 //Trace un plan sur la fenetre
 void trace_Plan(plan pl, couleur c){
 	glBegin(GL_QUADS);
@@ -137,6 +136,21 @@ void trace_Maison(maison mais){
 	for(i = 0; i<(int)(sizeof(mais.triangles)/sizeof(mais.triangles[0])); i++){
 		trace_Triangle(mais.triangles[i], c);
 	}
+}
+
+
+void trace_Collision(point p1, point p2){
+	boule b1,b2;
+	couleur c;
+	b1.centre = p1;
+	b2.centre = p2;
+	b1.rayon = 1;
+	b2.rayon = 1;
+	c.r = 1;
+	c.g = 0;
+	c.b = 0;
+	trace_Boule(b1, c);
+	trace_Boule(b2, c);
 }
 
 
