@@ -202,7 +202,7 @@ joueur init_joueur(point c, float largeur){
 	joueur j;
 
 	//Ici hauteur joueur donc la meme hauteur de la ou est la camera
-	int hauteur_joueur = c.d[1]-2;
+	int hauteur_joueur = c.d[1]+8;
 
 	j.centre = c;
 
@@ -366,9 +366,9 @@ arbre init_arbre(point c, float taille){
 
 bonus init_bonus(point c, float taille){
 	bonus bon;
-	int hauteur_murs = taille;
+	int hauteur_murs = taille*2;
 
-	c.d[1] += 15;
+	c.d[1] += 5;
 	bon.centre = c;
 
 	//Dessous

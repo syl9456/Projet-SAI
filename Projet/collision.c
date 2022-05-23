@@ -36,12 +36,11 @@ point cherchePlusLoinMaison(maison m, point origine){
 }
 
 
-
 point cherchePlusProchePlateforme(plateforme p, point origine){
 	float plusPetiteDistance = 1000000000;
 	point pointPlusProche;
 	float d;
-	for(int i=0; i<6;i++){
+	for(int i=0; i<6;i++){ 
 		for(int j=0; j<4; j++){
 			if((d = distance(origine,p.plans[i].point[j])) <= plusPetiteDistance){
 				pointPlusProche = p.plans[i].point[j];
@@ -141,14 +140,8 @@ point cherchePlusLoinArbre(arbre a, point origine){
 
 
 // Verifie une collsion avec une maison
-int colMaison(point posJoueur, point plusProche, point plusLoin){
+int collisions(point posJoueur, point plusProche, point plusLoin){
 	// Heureusement que la maison est un cube
-
-	/*printf("Plus Proche:");
-	affichePoint(plusProche);
-	printf("Plus Loin:");
-	affichePoint(plusLoin);
-	*/
 
 	// Verfie interiorité du cube
 	if(posJoueur.d[0] >= plusProche.d[0]  &&

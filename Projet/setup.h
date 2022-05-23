@@ -8,7 +8,6 @@
 #include <stdarg.h>
 #include "GL/gl.h"
 #include "GL/glut.h"
-#include <time.h>
 #include <math.h>
 
 
@@ -82,10 +81,6 @@ typedef struct joueur{
 	point centre;
 	plan plans[6];
 }joueur;
-
-typedef struct escalier{
-	point basG, hautD;
-}escalier;
 
 
 

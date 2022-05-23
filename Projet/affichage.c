@@ -151,11 +151,12 @@ void trace_Collision(point p1, point p2){
 	c.b = 0;
 	trace_Boule(b1, c);
 	trace_Boule(b2, c);
+
 }
 
 
 
-//Trace trois lignes pour visualiser l'origine 0,0,0 de la fenetre Et voir si nos formes se mettent bien au milieu tahu
+//Trace trois lignes pour visualiser l'origine 0,0,0 de la fenetre Et voir si nos formes se mettent bien au milieu
 void trace_Origine(){
   glBegin(GL_LINES);
   glColor3f(0,0,1);
@@ -170,107 +171,4 @@ void trace_Origine(){
   glVertex3f(0,0,100);
 
   glEnd();
-}
-
-void trace_praa(point p1, point p2, couleur c){
-
-
-	glBegin(GL_QUADS);
-	glColor3f(c.r, c.g, c.b);
-
-	// Face avant
-	glVertex3f(p1.d[0], p1.d[1], p1.d[2]);
-	glVertex3f(p2.d[0], p1.d[1], p1.d[2]);
-	glVertex3f(p2.d[0], p2.d[1], p1.d[2]);
-	glVertex3f(p1.d[0], p2.d[1], p1.d[2]);
-
-
-	// Face droite
-	glColor3f(c.r-0.1, c.g-0.1, c.b-0.1);
-	glVertex3f(p2.d[0], p1.d[1], p1.d[2]);
-	glVertex3f(p2.d[0], p1.d[1], p2.d[2]);
-	glVertex3f(p2.d[0], p2.d[1], p2.d[2]);
-	glVertex3f(p2.d[0], p2.d[1], p1.d[2]);
-
-
-	// Face arriere
-	glVertex3f(p2.d[0], p1.d[1], p2.d[2]);
-	glVertex3f(p1.d[0], p1.d[1], p2.d[2]);
-	glVertex3f(p1.d[0], p2.d[1], p2.d[2]);
-	glVertex3f(p2.d[0], p2.d[1], p2.d[2]);
-
-	// Face gauche
-	glColor3f(c.r-0.1, c.g-0.1, c.b-0.1);
-	glVertex3f(p1.d[0], p1.d[1], p2.d[2]);
-	glVertex3f(p1.d[0], p1.d[1], p1.d[2]);
-	glVertex3f(p1.d[0], p2.d[1], p1.d[2]);
-	glVertex3f(p1.d[0], p2.d[1], p2.d[2]);
-
-	
-	// Face haute
-	glColor3f(c.r-0.5, c.g-0.5, c.b-0.5);
-	glVertex3f(p1.d[0], p2.d[1], p1.d[2]);
-	glVertex3f(p2.d[0], p2.d[1], p1.d[2]);
-	glVertex3f(p2.d[0], p2.d[1], p2.d[2]);
-	glVertex3f(p1.d[0], p2.d[1], p2.d[2]);
-
-	// Face basse
-	glVertex3f(p1.d[0], p1.d[1], p1.d[2]);
-	glVertex3f(p2.d[0], p1.d[1], p1.d[2]);
-	glVertex3f(p2.d[0], p1.d[1], p2.d[2]);
-	glVertex3f(p1.d[0], p1.d[1], p2.d[2]);
-
-
-
-	glEnd();
-
-
-}
-
-void trace_escalier(escalier e, int hMarche){
-
-
-	//iterateur
-	int i;
-
-
-	// Nombre de marche
-	int nbMarche = (e.hautD.d[1] - e.basG.d[1])/hMarche;
-	// La derniere marche peut ne pas etre de la meme taille
-	float hDerMarche = (int)(e.hautD.d[1] - e.basG.d[1])%hMarche;
-	printf("\n\n\n%d %f\n", nbMarche, hDerMarche);
-	// profondeur marche
-	float profMarche = (e.hautD.d[2] - e.basG.d[2])/nbMarche;
-
-	point marche1, marche2;
-	// Couleur
-	couleur c;
-	c.r = 0.7;
-	c.g = 0.7;
-	c.b = 0.7;
-
-	marche1 = e.basG;
-
-	marche2.d[0] = e.hautD.d[0];
-	marche2.d[1] = e.basG.d[1] + hDerMarche;
-	marche2.d[2] = e.hautD.d[2];
-
-	trace_praa(marche1,marche2,c);
-
-	for(i=0; i<nbMarche; i++){
-
-		marche1.d[0] = e.basG.d[0];
-		marche1.d[1] = marche2.d[1];
-		marche1.d[2] += profMarche;
-
-		marche2.d[0] = e.hautD.d[0];
-		marche2.d[1] = marche1.d[1] + hMarche;
-		marche2.d[2] = e.hautD.d[2];
-
-		if(marche1.d[2] != marche2.d[2]){
-			trace_praa(marche1,marche2,c);
-		}
-
-	}
-
 }

@@ -185,7 +185,7 @@ matrice genereRAutourVec(float angle, vecteur vec){
 
 
 vecteur vecAvec2points(point p1, point p2){
-  vecteur v = initialiserVecteurDeFloat(p1.d[0]-p2.d[0],p1.d[1]-p2.d[1],p1.d[2]-p2.d[2]);
+  vecteur v = initialiserVecteurDeFloat(p1.d[0],p1.d[1]-p2.d[1],p1.d[2]);
   return v;
 }
 
