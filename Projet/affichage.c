@@ -157,3 +157,85 @@ void trace_Origine(){
 
   glEnd();
 }
+
+void trace_praa(point p1, point p2, couleur c){
+
+
+	glBegin(GL_QUADS);
+	glColor3f(c.r, c.g, c.b);
+
+	// Face avant
+	glVertex3f(p1.d[0], p1.d[1], p1.d[2]);
+	glVertex3f(p2.d[0], p1.d[1], p1.d[2]);
+	glVertex3f(p2.d[0], p2.d[1], p1.d[2]);
+	glVertex3f(p1.d[0], p2.d[1], p1.d[2]);
+
+
+	// Face droite
+	glVertex3f(p2.d[0], p1.d[1], p1.d[2]);
+	glVertex3f(p2.d[0], p1.d[1], p2.d[2]);
+	glVertex3f(p2.d[0], p2.d[1], p2.d[2]);
+	glVertex3f(p2.d[0], p2.d[1], p1.d[2]);
+
+
+	// Face arriere
+	glVertex3f(p2.d[0], p1.d[1], p2.d[2]);
+	glVertex3f(p1.d[0], p1.d[1], p2.d[2]);
+	glVertex3f(p1.d[0], p2.d[1], p2.d[2]);
+	glVertex3f(p2.d[0], p2.d[1], p2.d[2]);
+
+	// Face gauche
+	glVertex3f(p1.d[0], p1.d[1], p2.d[2]);
+	glVertex3f(p1.d[0], p1.d[1], p1.d[2]);
+	glVertex3f(p1.d[0], p2.d[1], p1.d[2]);
+	glVertex3f(p1.d[0], p2.d[1], p2.d[2]);
+
+	
+	// Face haute
+	glColor3f(c.r-0.5, c.g-0.5, c.b-0.5);
+	glVertex3f(p1.d[0], p2.d[1], p1.d[2]);
+	glVertex3f(p2.d[0], p2.d[1], p1.d[2]);
+	glVertex3f(p2.d[0], p2.d[1], p2.d[2]);
+	glVertex3f(p1.d[0], p2.d[1], p2.d[2]);
+
+	// Face basse
+	glVertex3f(p1.d[0], p1.d[1], p1.d[2]);
+	glVertex3f(p2.d[0], p1.d[1], p1.d[2]);
+	glVertex3f(p2.d[0], p1.d[1], p2.d[2]);
+	glVertex3f(p1.d[0], p1.d[1], p2.d[2]);
+
+
+
+	glEnd();
+
+
+}
+
+void trace_escalier(escalier e){
+
+	// Deux parallelepipede
+	point base1, base2;
+	// Second = moitie premier (haut de la marche)
+	point marche1, marche2;
+	// Couleur
+	couleur c;
+
+	base1 = e.basG;
+
+	base2.d[0] = e.hautD.d[0];
+	base2.d[1] = (e.hautD.d[1]- e.basG.d[1])/2;
+	base2.d[2] = e.hautD.d[2];
+
+	marche1.d[0] = e.basG.d[0];
+	marche1.d[1] = (e.hautD.d[1] - e.basG.d[1])/2;
+	marche1.d[2] = (e.hautD.d[2] - e.basG.d[2])/2;
+
+	marche2 = e.hautD;
+	
+
+	c.r = 0.7;
+	c.g = 0.7;
+	c.b = 0.7;
+	trace_praa(base1,base2,c);
+	trace_praa(marche1,marche2,c);
+}

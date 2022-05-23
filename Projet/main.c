@@ -58,14 +58,15 @@ float angleRoulis=0,angleLacet=0;
 
 //Sommet de centre de fenetre (0,0,0)
 point centre;
+
+//point (1,2,3);
+point p123;
 //Une maison
 maison mais;
 // Une plateforme
 plateforme base;
 // Un joueur
 joueur jou;
-
-
 
 
 
@@ -331,6 +332,14 @@ void affichage(){
   trace_Plateforme(base);
   trace_Joueur(jou);
 
+  escalier e;
+
+  e.basG = centre;
+  e.hautD = p123;
+
+  trace_escalier(e);
+
+
 
   glutSwapBuffers();
 }
@@ -455,7 +464,7 @@ void mouvementSouris(int xPos, int yPos) {
 int main(int argc, char *argv[]){
   /********** Init de Glut ********/
 
-
+  p123 = initialiserPointDeFloat(5,5,5);
   posEye = initialiserPointDeFloat(-50,10,0);
   dirEye = initialiserVecteurDeFloat(1,0,0);
   orthoDirEye = initialiserVecteurDeFloat(0,0,0);

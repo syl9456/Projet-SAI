@@ -10,4 +10,9 @@ void trace_Joueur(joueur jou);
 void trace_Maison(maison maison);
 void trace_Origine();
 
+
+void trace_praa(point p1, point p2, couleur c);
+void trace_escalier(escalier e);
+
+
 #endif

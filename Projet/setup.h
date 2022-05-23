@@ -83,5 +83,9 @@ typedef struct joueur{
 	plan plans[6];
 }joueur;
 
+typedef struct escalier{
+	point basG, hautD;
+}escalier;
+
 
 #endif
