@@ -11,7 +11,11 @@
 #define nbMaisons 4
 #define nbArbres 30
 #define nbBonus 10
+#define nbEscaliers 1
 #define nbTabCollisions 250 //+1 pour la base
+
+
+#define JTAILLE 10
 
 /*
   Tableaux des elements de la scene
@@ -20,6 +24,7 @@ plateforme plateformes[nbPlateformes];
 maison maisons[nbMaisons];
 arbre arbres[nbArbres];
 bonus bonuses[nbBonus];
+escalier escaliers[nbEscaliers];
 
 point tabCollisions[nbTabCollisions][2];
 int compteurPourTab = 0;
@@ -83,12 +88,34 @@ void initialiser_Joueur(){
   jou = init_joueur(centre,2);
 }
 
+void  initialiser_Escaliers(){
+
+  /*float tailleP1 = fabs(p1.centre.d[0] - p1.plans[0].point[0].d[0]); 
+  float tailleP2 = fabs(p2.centre.d[0] - p2.plans[0].point[0].d[0]); 
+
+  float dist = fabs(p1.centre.d[0] - p2.centre.d[0])-tailleP1-tailleP2;
+*/
+
+  escalier e;
+
+  e.basG.d[0] = 0;
+  e.basG.d[1] = 0;
+  e.basG.d[2] = 300;
+
+  e.hautD.d[0] = 300;
+  e.hautD.d[1] = 0.1+100;
+  e.hautD.d[2] = 450;
+
+  e.hMarche = 1 + rand()%5;
+
+  escaliers[0] =  e;
+}
 
 void  initialiser_Plateformes(){
   point p = centre;
   point plusProche,plusLoin;
   p.d[0] = 150;
-  p.d[1] -= HAUTEUR_PLATEFORME+0.1;
+  p.d[1] = -HAUTEUR_PLATEFORME+0.1;
   p.d[2] = 150;
 
   plateformes[0] = init_plateforme(centre, 150);
@@ -101,7 +128,8 @@ void  initialiser_Plateformes(){
   compteurPourTab += 1;
 
 
-  p.d[0] = 600;
+  p.d[0] = 150;
+  p.d[1] = -HAUTEUR_PLATEFORME+100+0.1;
   p.d[2] = 600;
   plateformes[1] = init_plateforme(centre, 150);
   plateformes[1] = translation_plateforme(plateformes[1],p);
@@ -146,17 +174,29 @@ void  initialiser_Maisons(){
   }
 }
 
-void  initialiser_Arbres(){
+void  initialiser_Arbres(plateforme sol){
   float angle = 0;
   point plusProche,plusLoin;
   int x,y;
 
+  //Chanceux : elle sont forcement carree
+  float tailleSol = fabs(sol.centre.d[0] - sol.plans[0].point[0].d[0]);
+
+  int min,max;
+
   point p = centre;
+
   for(int i = 0; i<nbArbres; i++){
-    x = 450 + rand()%300;
-    y = 450 + rand()%300;
+    min = (sol.centre.d[0] - tailleSol);
+    max = (sol.centre.d[0] + tailleSol);
+    x = min + rand()%(max-min);
+    min = (sol.centre.d[2] - tailleSol);
+    max = (sol.centre.d[2] + tailleSol);
+
+    y = min + rand()%(max-min);
 
     p.d[0] = (float)x;
+    p.d[1] = sol.centre.d[1]+5;
     p.d[2] = (float)y;
 
     arbres[i] = init_arbre(centre, 5);
@@ -174,16 +214,29 @@ void  initialiser_Arbres(){
 }
 
 
-void initialiser_Bonuses(){
+void initialiser_Bonuses(plateforme sol){
+
+  //Chanceux : elle sont forcement carree
+  float tailleSol = fabs(sol.centre.d[0] - sol.plans[0].point[0].d[0]);
+  int min,max;
+
   point p = centre;
   point plusProche,plusLoin;
   int x,y;
 
+
+
   for(int i = 0; i<nbBonus; i++){
-    x = 450 + rand()%300;
-    y = 450 + rand()%300;
+    min = (sol.centre.d[0] - tailleSol);
+    max = (sol.centre.d[0] + tailleSol);
+    x = min + rand()%(max-min);
+    min = (sol.centre.d[2] - tailleSol);
+    max = (sol.centre.d[2] + tailleSol);
+
+    y = min + rand()%(max-min);
 
     p.d[0] = (float)x;
+    p.d[1] = sol.centre.d[1]+5;
     p.d[2] = (float)y;
 
     bonuses[i] = init_bonus(centre, 2);
@@ -258,12 +311,12 @@ void intialiser_Structures(){
 
   //initialiser_Base(1000);
   //initialiser_Spirale();
-
-  initialiser_Arbres();
-  initialiser_Maisons();
   initialiser_Plateformes();
+  initialiser_Escaliers();
+  initialiser_Arbres(plateformes[1]);
+  initialiser_Maisons();
   initialiser_Joueur();
-  initialiser_Bonuses();
+  initialiser_Bonuses(plateformes[1]);
 
 }
 
@@ -295,6 +348,12 @@ void trace_Bonuses(){
 void trace_Arbres(){
   for(int i = 0; i<(int)(sizeof(arbres)/sizeof(arbre)); i++){
     trace_Arbre(arbres[i]);
+  }
+}
+void trace_Escaliers(){
+  //int nbMarche = 5 + rand()%50;
+  for(int i = 0; i<nbEscaliers; i++){
+    trace_Escalier(escaliers[i]);
   }
 }
 
@@ -381,6 +440,11 @@ void animer(){
     posEye.d[2] = z;
   }
 
+  if(colEscalier(escaliers[0],posEye) == 1){
+    posEye.d[1] = etatHauteur(escaliers[0], posEye) ;//+ JTAILLE;
+    posEye.d[1] += 10;
+  }
+
   if(avant || cotes){
     jou = translation_joueur(jou,posEye);
   }
@@ -408,10 +472,11 @@ void affichage(){
             upEye.d[0],
             upEye.d[1],
             upEye.d[2]);
-
+  
+  trace_Plateformes();
+  trace_Escaliers();
   trace_Origine();
   trace_Maisons();
-  trace_Plateformes();
   trace_Bonuses();
   trace_Arbres();
   trace_Joueur(jou);

@@ -172,3 +172,121 @@ void trace_Origine(){
 
   glEnd();
 }
+
+void trace_praa(point p1, point p2, couleur c){
+
+
+	glBegin(GL_QUADS);
+	glColor3f(c.r, c.g, c.b);
+
+	// Face avant
+	glVertex3f(p1.d[0], p1.d[1], p1.d[2]);
+	glVertex3f(p2.d[0], p1.d[1], p1.d[2]);
+	glVertex3f(p2.d[0], p2.d[1], p1.d[2]);
+	glVertex3f(p1.d[0], p2.d[1], p1.d[2]);
+
+
+	// Face droite
+	glColor3f(c.r-0.1, c.g-0.1, c.b-0.1);
+	glVertex3f(p2.d[0], p1.d[1], p1.d[2]);
+	glVertex3f(p2.d[0], p1.d[1], p2.d[2]);
+	glVertex3f(p2.d[0], p2.d[1], p2.d[2]);
+	glVertex3f(p2.d[0], p2.d[1], p1.d[2]);
+
+
+	// Face arriere
+	glVertex3f(p2.d[0], p1.d[1], p2.d[2]);
+	glVertex3f(p1.d[0], p1.d[1], p2.d[2]);
+	glVertex3f(p1.d[0], p2.d[1], p2.d[2]);
+	glVertex3f(p2.d[0], p2.d[1], p2.d[2]);
+
+	// Face gauche
+	glColor3f(c.r-0.1, c.g-0.1, c.b-0.1);
+	glVertex3f(p1.d[0], p1.d[1], p2.d[2]);
+	glVertex3f(p1.d[0], p1.d[1], p1.d[2]);
+	glVertex3f(p1.d[0], p2.d[1], p1.d[2]);
+	glVertex3f(p1.d[0], p2.d[1], p2.d[2]);
+
+	
+	// Face haute
+	glColor3f(c.r-0.5, c.g-0.5, c.b-0.5);
+	glVertex3f(p1.d[0], p2.d[1], p1.d[2]);
+	glVertex3f(p2.d[0], p2.d[1], p1.d[2]);
+	glVertex3f(p2.d[0], p2.d[1], p2.d[2]);
+	glVertex3f(p1.d[0], p2.d[1], p2.d[2]);
+
+	// Face basse
+	glVertex3f(p1.d[0], p1.d[1], p1.d[2]);
+	glVertex3f(p2.d[0], p1.d[1], p1.d[2]);
+	glVertex3f(p2.d[0], p1.d[1], p2.d[2]);
+	glVertex3f(p1.d[0], p1.d[1], p2.d[2]);
+
+
+
+	glEnd();
+
+
+}
+
+void trace_Escalier(escalier e){
+
+
+	//iterateur
+	int i;
+
+
+	// Nombre de marche
+	int nbMarche = (e.hautD.d[1] - e.basG.d[1])/e.hMarche;
+	// La derniere marche peut ne pas etre de la meme taille
+	float hDerMarche = (int)(e.hautD.d[1] - e.basG.d[1])%e.hMarche;
+	printf("\n\n\n%d %f\n", nbMarche, hDerMarche);
+	// profondeur marche
+	float profMarche = (e.hautD.d[2] - e.basG.d[2])/nbMarche;
+
+	point marche1, marche2;
+	// Couleur
+	couleur c;
+	c.r = 0.10;
+	c.g = 0.70;
+	c.b = 0.2;
+
+	marche1 = e.basG;
+
+	marche2.d[0] = e.hautD.d[0];
+	marche2.d[1] = e.basG.d[1] + hDerMarche;
+	marche2.d[2] = e.hautD.d[2];
+
+	trace_praa(marche1,marche2,c);
+
+	for(i=0; i<nbMarche; i++){
+
+		marche1.d[0] = e.basG.d[0];
+		marche1.d[1] = marche2.d[1];
+		marche1.d[2] += profMarche;
+
+		marche2.d[0] = e.hautD.d[0];
+		marche2.d[1] = marche1.d[1] + e.hMarche;
+		marche2.d[2] = e.hautD.d[2];
+
+		/*
+		if(i%2 == 0){
+			c.r -= i/1000.;
+			c.g -= i/10000.;
+		}
+		*/
+
+		if(i%2 == 0){
+			c.r += i/100.;
+		}
+		//c.r = i%3/10.;
+		//c.g = i%3/10.;
+		//c.b = i%3/10.;
+
+
+		if(marche1.d[2] != marche2.d[2]){
+			trace_praa(marche1,marche2,c);
+		}
+
+	}
+
+}

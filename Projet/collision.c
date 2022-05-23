@@ -144,12 +144,12 @@ int collisions(point posJoueur, point plusProche, point plusLoin){
 	// Heureusement que la maison est un cube
 
 	// Verfie interiorité du cube
-	if(posJoueur.d[0] >= plusProche.d[0]  &&
-		posJoueur.d[0] <= plusLoin.d[0]   &&
-		posJoueur.d[1] >= plusProche.d[1] &&
-		posJoueur.d[1] <= plusLoin.d[1]   &&
-		posJoueur.d[2] >= plusProche.d[2] &&
-		posJoueur.d[2] <= plusLoin.d[2]   ){
+	if(posJoueur.d[0]+2 >= plusProche.d[0]  &&
+		posJoueur.d[0]-2 <= plusLoin.d[0]   &&
+		posJoueur.d[1]+2 >= plusProche.d[1] &&
+		posJoueur.d[1]-2 <= plusLoin.d[1]   &&
+		posJoueur.d[2]+2 >= plusProche.d[2] &&
+		posJoueur.d[2]-2 <= plusLoin.d[2]   ){
 
 		// Le joueur est en collision
 		return 1;
@@ -157,12 +157,12 @@ int collisions(point posJoueur, point plusProche, point plusLoin){
 	}
 
 	// Verfie interiorité du cube
-	if(posJoueur.d[0] <= plusProche.d[0]  &&
-		posJoueur.d[0] >= plusLoin.d[0]   &&
-		posJoueur.d[1] <= plusProche.d[1] &&
-		posJoueur.d[1] >= plusLoin.d[1]   &&
-		posJoueur.d[2] <= plusProche.d[2] &&
-		posJoueur.d[2] >= plusLoin.d[2]   ){
+	if(posJoueur.d[0]-2 <= plusProche.d[0]  &&
+		posJoueur.d[0]+2 >= plusLoin.d[0]   &&
+		posJoueur.d[1]-2 <= plusProche.d[1] &&
+		posJoueur.d[1]+2 >= plusLoin.d[1]   &&
+		posJoueur.d[2]-2 <= plusProche.d[2] &&
+		posJoueur.d[2]+2 >= plusLoin.d[2]   ){
 
 		// Le joueur est en collision
 		return 1;
@@ -198,4 +198,41 @@ int collisions(point posJoueur, point plusProche, point plusLoin){
 
 	//pas de collision
 	return 0;
+}
+
+// Verifie la collision avec un escalier de bas en haut
+int colEscalier(escalier e, point posJoueur){
+
+	// Verfie interiorité du cube
+	if(posJoueur.d[0] >= e.basG.d[0]   &&
+		posJoueur.d[0] <= e.hautD.d[0] &&
+		posJoueur.d[1]-10 >= e.basG.d[1]  &&
+		posJoueur.d[1]-10 <= e.hautD.d[1] &&
+		posJoueur.d[2] >= e.basG.d[2]  &&
+		posJoueur.d[2] <= e.hautD.d[2]   ){
+
+		// Le joueur est en collision
+		return 1;
+	
+	}
+
+	return 0;
+}
+
+// Renvoie la hauteur du joueur dans escalier
+float etatHauteur(escalier e, point posJoueur){
+
+	int nbMarche = (e.hautD.d[1] - e.basG.d[1])/e.hMarche;
+	float posInt = fabs(e.hautD.d[2] - posJoueur.d[2]);
+	float profMarche = (e.hautD.d[2] - e.basG.d[2])/nbMarche;
+
+	int numMarche = (int)(posInt/profMarche);
+
+	//printf("\n\n\n\n\n\n%d\n\n\n\n\n\n\n",numMarche);
+	//printf("\n\n\n\n\n\n%d\n\n\n\n\n\n\n",nbMarche);
+	//printf("\n\n\n\n\n\n%d\n\n\n\n\n\n\n",e.hMarche*(nbMarche-numMarche));
+
+	return  e.hMarche*(nbMarche-numMarche);
+
+
 }

@@ -82,6 +82,11 @@ typedef struct joueur{
 	plan plans[6];
 }joueur;
 
+//Un joueur est pareil qu'une plateforme
+typedef struct escalier{
+	point basG, hautD;
+	int hMarche;
+}escalier;
 
 
 #endif

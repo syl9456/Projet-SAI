@@ -16,6 +16,8 @@ point cherchePlusLoinArbre(arbre a, point origine);
 point cherchePlusProcheArbre(arbre a, point origine);
 
 int collisions(point posJoueur, point plusProche, point plusLoin);
+int colEscalier(escalier e, point posJoueur);
+float etatHauteur(escalier e, point posJoueur);
 
 
 #endif
