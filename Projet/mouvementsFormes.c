@@ -235,7 +235,6 @@ bonus rotation_bonus_vec(bonus bon, float angle, vecteur vec){
 			bon.plans[i].point[j] = multiplicationMatricePoint(m,bon.plans[i].point[j]);
 		}
 	}
-	bon.centre = multiplicationMatricePoint(m,bon.centre);
 	return bon;
 }
 

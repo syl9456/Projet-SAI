@@ -7,11 +7,10 @@
 
 
 // Listing des elements et de leur nombre sur la scene
-
-#define nbPlateformes 30
-#define nbMaisons 20
-#define nbArbres 20
-#define nbBonus 30
+#define nbPlateformes 2
+#define nbMaisons 4
+#define nbArbres 30
+#define nbBonus 10
 #define nbTabCollisions 250 //+1 pour la base
 
 /*
@@ -61,15 +60,11 @@ float angleRoulis=0,angleLacet=0;
 
 //Sommet de centre de fenetre (0,0,0)
 point centre;
-
-//point (1,2,3);
-point p123;
 //Une maison
 maison mais;
-// Une plateforme
-plateforme base;
 // Un joueur
 joueur jou;
+
 
 
 int montrerCollision = 0;
@@ -84,43 +79,39 @@ float angleBonus = 0;
 
 /************************************************************************/
 
+void initialiser_Joueur(){
+  jou = init_joueur(centre,2);
+}
 
-void initialiser_Base(float taille){
+
+void  initialiser_Plateformes(){
   point p = centre;
   point plusProche,plusLoin;
-  p.d[0] = taille;
-  p.d[1] -= HAUTEUR_PLATEFORME+1;
-  p.d[2] = taille;
+  p.d[0] = 150;
+  p.d[1] -= HAUTEUR_PLATEFORME+0.1;
+  p.d[2] = 150;
 
-  base = init_plateforme(centre, taille);
-  base = translation_plateforme(base,p);
+  plateformes[0] = init_plateforme(centre, 150);
+  plateformes[0] = translation_plateforme(plateformes[0],p);
+
+  plusProche = cherchePlusProchePlateforme(plateformes[0],centre);
+  plusLoin = cherchePlusLoinPlateforme(plateformes[0],centre);
+  tabCollisions[compteurPourTab][0] = plusProche;
+  tabCollisions[compteurPourTab][1] = plusLoin;
+  compteurPourTab += 1;
 
 
-  plusProche = cherchePlusProchePlateforme(base,centre);
-  plusLoin = cherchePlusLoinPlateforme(base,centre);
+  p.d[0] = 600;
+  p.d[2] = 600;
+  plateformes[1] = init_plateforme(centre, 150);
+  plateformes[1] = translation_plateforme(plateformes[1],p);
+
+  plusProche = cherchePlusProchePlateforme(plateformes[1],centre);
+  plusLoin = cherchePlusLoinPlateforme(plateformes[1],centre);
   tabCollisions[compteurPourTab][0] = plusProche;
   tabCollisions[compteurPourTab][1] = plusLoin;
   compteurPourTab += 1;
 }
-
-
-// void  initialiser_plateformes(){
-//   point p = centre;
-//   point plusProche,plusLoin;
-//   p.d[2] -= 50;
-//   for(int i = 0; i<nbPlateformes; i++){
-//     plateformes[i] = init_plateforme(centre, 10);
-//     plateformes[i] = translation_plateforme(plateformes[i],p);
-
-//     plusProche = cherchePlusProchePlateforme(plateformes[i],centre);
-//     plusLoin = cherchePlusLoinPlateforme(plateformes[i],centre);
-//     tabCollisions[compteurPourTab][0] = plusProche;
-//     tabCollisions[compteurPourTab][1] = plusLoin;
-//     compteurPourTab += 1;
-
-//     p.d[2] -= 0;
-//   }
-// }
 
 
 void  initialiser_Maisons(){
@@ -130,13 +121,13 @@ void  initialiser_Maisons(){
   p.d[0] += 100;
 
   for(int i = 0; i<nbMaisons; i++){
-    if(i%5 == 0){
+    if(i%2 == 0){
       p.d[2] += 100;
       p.d[0] = centre.d[0]+100;
     }
     maisons[i] = init_maison(centre, 20);
     //Ne marche pas vraiment avec la rotation pour le moment
-    maisons[i] = rotation_maison(maisons[i],'y',angle);
+    //maisons[i] = rotation_maison(maisons[i],'y',angle);
     maisons[i] = translation_maison(maisons[i],p);
 
     plusProche = cherchePlusProcheMaison(maisons[i],centre);
@@ -160,17 +151,16 @@ void  initialiser_Arbres(){
   point plusProche,plusLoin;
   int x,y;
 
-  srand(getpid());
   point p = centre;
   for(int i = 0; i<nbArbres; i++){
-    x = rand()%1001;
-    y = rand()%1001;
+    x = 450 + rand()%300;
+    y = 450 + rand()%300;
 
     p.d[0] = (float)x;
     p.d[2] = (float)y;
 
     arbres[i] = init_arbre(centre, 5);
-    //arbres[i] = rotation_arbre(arbres[i],'y',angle);
+    arbres[i] = rotation_arbre(arbres[i],'y',angle);
     arbres[i] = translation_arbre(arbres[i],p);
 
     plusProche = cherchePlusProcheArbre(arbres[i],centre);
@@ -184,60 +174,20 @@ void  initialiser_Arbres(){
 }
 
 
-// void  initialiser_bonuses(){
-//   point p = centre;
-//   point plusProche,plusLoin;
-//   p.d[0] -= 50;
-//   for(int i = 0; i<nbBonus; i++){
-//     bonuses[i] = init_bonus(centre, 3);
-//     bonuses[i] = translation_bonus(bonuses[i],p);
-
-//     plusProche = cherchePlusProcheBonus(bonuses[i],centre);
-//     plusLoin = cherchePlusLoinBonus(bonuses[i],centre);
-//     tabCollisions[compteurPourTab][0] = plusProche;
-//     tabCollisions[compteurPourTab][1] = plusLoin;
-//     compteurPourTab += 1;
-
-//     p.d[0] -= 50;
-//   }
-// }
-
-
-
-void initialiser_Spirale(){
-  point p;
+void initialiser_Bonuses(){
+  point p = centre;
   point plusProche,plusLoin;
-  float angle = 0;
-  float ajoutAngle = 5;
-  float distance = 0;
-  float ajoutDistance = 5;
+  int x,y;
 
-  for(int i = 0; i< nbPlateformes; i++){
-    plateformes[i] = init_plateforme(centre, 10);
-    bonuses[i] = init_bonus(centre,2);
-    p.d[0] = cos(angle)* distance;
-    p.d[1] += 10;
-    p.d[2] = sin(angle)*distance;
+  for(int i = 0; i<nbBonus; i++){
+    x = 450 + rand()%300;
+    y = 450 + rand()%300;
 
-    plateformes[i] = rotation_plateforme(plateformes[i],'y',angle);
-    plateformes[i] = translation_plateforme(plateformes[i],p);
+    p.d[0] = (float)x;
+    p.d[2] = (float)y;
 
-    distance += ajoutDistance;
-    angle += ajoutAngle;
-  }
-
-  p = initialiserPointDeFloat(800,0,800);
-
-  for(int i = 0; i< nbPlateformes; i++){
-
-    plateformes[i] = translation_plateforme(plateformes[i],p);
+    bonuses[i] = init_bonus(centre, 2);
     bonuses[i] = translation_bonus(bonuses[i],p);
-
-    plusProche = cherchePlusProchePlateforme(plateformes[i],centre);
-    plusLoin = cherchePlusLoinPlateforme(plateformes[i],centre);
-    tabCollisions[compteurPourTab][0] = plusProche;
-    tabCollisions[compteurPourTab][1] = plusLoin;
-    compteurPourTab += 1;
 
     plusProche = cherchePlusProcheBonus(bonuses[i],centre);
     plusLoin = cherchePlusLoinBonus(bonuses[i],centre);
@@ -246,6 +196,51 @@ void initialiser_Spirale(){
     compteurPourTab += 1;
   }
 }
+
+
+
+// void initialiser_Spirale(){
+//   point p;
+//   point plusProche,plusLoin;
+//   float angle = 0;
+//   float ajoutAngle = 5;
+//   float distance = 0;
+//   float ajoutDistance = 5;
+
+//   for(int i = 0; i< nbPlateformes; i++){
+//     plateformes[i] = init_plateforme(centre, 10);
+//     bonuses[i] = init_bonus(centre,2);
+//     p.d[0] = cos(angle)* distance;
+//     p.d[1] += 10;
+//     p.d[2] = sin(angle)*distance;
+
+//     plateformes[i] = rotation_plateforme(plateformes[i],'y',angle);
+//     plateformes[i] = translation_plateforme(plateformes[i],p);
+
+//     distance += ajoutDistance;
+//     angle += ajoutAngle;
+//   }
+
+//   p = initialiserPointDeFloat(800,0,800);
+
+//   for(int i = 0; i< nbPlateformes; i++){
+
+//     plateformes[i] = translation_plateforme(plateformes[i],p);
+//     bonuses[i] = translation_bonus(bonuses[i],p);
+
+//     plusProche = cherchePlusProchePlateforme(plateformes[i],centre);
+//     plusLoin = cherchePlusLoinPlateforme(plateformes[i],centre);
+//     tabCollisions[compteurPourTab][0] = plusProche;
+//     tabCollisions[compteurPourTab][1] = plusLoin;
+//     compteurPourTab += 1;
+
+//     plusProche = cherchePlusProcheBonus(bonuses[i],centre);
+//     plusLoin = cherchePlusLoinBonus(bonuses[i],centre);
+//     tabCollisions[compteurPourTab][0] = plusProche;
+//     tabCollisions[compteurPourTab][1] = plusLoin;
+//     compteurPourTab += 1;
+//   }
+// }
 
 
 
@@ -261,17 +256,15 @@ void initialiser_Spirale(){
 void intialiser_Structures(){
   centre = initialiserPointDeFloat(0,0,0);
 
-  initialiser_Spirale();
-  initialiser_Arbres();
-  initialiser_Base(1000);
-  initialiser_Maisons();
+  //initialiser_Base(1000);
+  //initialiser_Spirale();
 
-  for(int i = 0; i<nbTabCollisions; i++){
-    printf("0:\n");
-    affichePoint(tabCollisions[i][0]);
-    printf("1:\n");
-    affichePoint(tabCollisions[i][1]);
-  }
+  initialiser_Arbres();
+  initialiser_Maisons();
+  initialiser_Plateformes();
+  initialiser_Joueur();
+  initialiser_Bonuses();
+
 }
 
 
@@ -281,8 +274,6 @@ void intialiser_Structures(){
 //                      AFFICHAGE
 
 /************************************************************************/
-
-
 
 
 void trace_Maisons(){
@@ -340,16 +331,23 @@ void calculeOrtho(){
 //On leur attribut donc un vecteur central parrallele a l'axe des y, mais d'origine le centre de l'objet, puis on effectue une rotation autour de ce vecteur
 //Ne marche pas encore le vecteur est mauvais 
 void animation_bonuses(){
-  point pvec;
+  //point pvec;
   vecteur vec;
   for(int i = 0; i<nbBonus; i++){
-    pvec = bonuses[i].centre;
-    pvec.d[1] +=  1;
-    vec = vecAvec2points(bonuses[i].centre,pvec);
-    //afficheVecteur(vec);
+    // pvec = bonuses[i].centre;
+    // vec = normalise(vecAvec2points(pvec,bonuses[i].centre));
+    vec.d[0] = bonuses[i].centre.d[0];
+    vec.d[1] = bonuses[i].centre.d[1]+2;
+    vec.d[2] = bonuses[i].centre.d[2];
+
+    vec = normalise(vec);
+    //affichePoint(bonuses[i].centre);
+    // affichePoint(pvec);
+    afficheVecteur(vec);
     bonuses[i] = rotation_bonus_vec(bonuses[i],angleBonus,vec);
   }
   angleBonus += 0.0001;
+  if(angleBonus >= 360) angleBonus = 0;
 }
 
 
@@ -357,9 +355,8 @@ void animation_bonuses(){
 
 //Fonction pour raffraichir la fenetre (encore rien fait de plus que le tp)
 void animer(){
-  //animation_bonuses();
+  animation_bonuses();
   calculeOrtho();
-  //calculeCollision();
 
   float x,y,z;
 
@@ -417,16 +414,7 @@ void affichage(){
   trace_Plateformes();
   trace_Bonuses();
   trace_Arbres();
-  trace_Plateforme(base);
   trace_Joueur(jou);
-
-  escalier e;
-
-  e.basG = centre;
-  e.hautD = p123;
-
-  trace_escalier(e,3);
-
 
 
   if(montrerCollision){
@@ -562,8 +550,9 @@ void mouvementSouris(int xPos, int yPos) {
 int main(int argc, char *argv[]){
   /********** Init de Glut ********/
 
-  p123 = initialiserPointDeFloat(10,10,10);
-  posEye = initialiserPointDeFloat(-50,10,0);
+  srand(getpid());
+
+  posEye = initialiserPointDeFloat(0,10,0);
   dirEye = initialiserVecteurDeFloat(1,0,0);
   orthoDirEye = initialiserVecteurDeFloat(0,0,0);
   upEye = initialiserVecteurDeFloat(0,1,0);
