@@ -306,7 +306,7 @@ void trace_Arbres(){
 
 int colTabCollisions(point posJoueur){
   for(int i = 0; i<nbTabCollisions; i++){
-    if(colMaison(posJoueur, tabCollisions[i][0], tabCollisions[i][1])){
+    if(collisions(posJoueur, tabCollisions[i][0], tabCollisions[i][1])){
       return 1;
     }
   }

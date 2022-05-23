@@ -140,7 +140,7 @@ point cherchePlusLoinArbre(arbre a, point origine){
 
 
 // Verifie une collsion avec une maison
-int colMaison(point posJoueur, point plusProche, point plusLoin){
+int collisions(point posJoueur, point plusProche, point plusLoin){
 	// Heureusement que la maison est un cube
 
 	// Verfie interiorité du cube
