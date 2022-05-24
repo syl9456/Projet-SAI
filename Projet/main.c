@@ -4,6 +4,8 @@
 #include "collision.h"
 #include "matrices.h"
 #include "mouvementsFormes.h"
+#include "TAD_k-arbres.h"
+#include "cube.h" //cube est spécialement fait pour les k-arbres a ne pas utiliser pour autre chose
 
 
 // Listing des elements et de leur nombre sur la scene
@@ -14,7 +16,6 @@
 #define nbEtoiles 100
 #define nbEscaliers 1
 #define nbTabCollisions 250 //+1 pour la base
-
 
 #define JTAILLE 10
 
@@ -28,12 +29,15 @@ bonus bonuses[nbBonus];
 escalier escaliers[nbEscaliers];
 bonus etoiles[nbEtoiles];
 
-/* Comtpeur de bonus */
 
+/* Comptpeur de bonus */
 int score = nbBonus;
 
 point tabCollisions[nbTabCollisions][2];
 int compteurPourTab = 0;
+
+karbre tabKArbres[nbTabCollisions];
+karbre totalKArbre;
 
 //Variables de vitesse de camera
 float vitesseCamera = 1;
@@ -42,6 +46,7 @@ float sensitivite = 0.005;
 
 //(point ici est un vecteur4)
 //Position de l'observateur (endroit) (-50,10,0)
+point retenirPosEye;
 point posEye;
 //Direction vers laquelle l'observateur regarde (vecteur) (1,0,0)  pour pouvoir marcher droit ou reculer
 vecteur dirEye;
@@ -79,6 +84,7 @@ joueur jou;
 
 
 int montrerCollision = 0;
+int montrerArbre = 0;
 float angleBonus = 0;
 
 
@@ -217,7 +223,6 @@ void  initialiser_Arbres(plateforme sol){
     p.d[2] = (float)y;
 
     arbres[i] = init_arbre(centre, 5);
-    arbres[i] = rotation_arbre(arbres[i],'y',angle);
     arbres[i] = translation_arbre(arbres[i],p);
 
     plusProche = cherchePlusProcheArbre(arbres[i],centre);
@@ -358,6 +363,19 @@ void initialiser_Etoiles(){
 // }
 
 
+void initialiser_KArbres(){
+  int i;
+  for(i = 0; i<compteurPourTab; i++){
+    tabKArbres[i] = objet2arbre(tabCollisions[i][0],tabCollisions[i][1]);
+    afficheKArbre(tabKArbres[i]);
+  }
+  totalKArbre = intersection(tabKArbres[0],tabKArbres[1]);
+  for(i = 2; i<compteurPourTab;i++){
+    totalKArbre = intersection(totalKArbre,tabKArbres[i]);
+  }
+}
+
+
 
 
 
@@ -380,6 +398,9 @@ void intialiser_Structures(){
   initialiser_Joueur();
   initialiser_Bonuses(plateformes[1]);
   initialiser_Etoiles(plateformes[1]);
+
+  initialiser_KArbres();
+  afficheKArbre(totalKArbre);
 }
 
 
@@ -430,6 +451,41 @@ void trace_Escaliers(){
   for(int i = 0; i<nbEscaliers; i++){
     trace_Escalier(escaliers[i]);
   }
+}
+
+
+void traceKarbre3D(karbre A){
+
+    /* arbre vide ? */
+    if (A == NULL){
+        return;
+    }
+
+    switch (A->etat)
+    {
+        case VIDE : 
+          break;
+
+        case PLEIN :
+          traceCube(A->c.s1.x,
+                 A->c.s1.y,
+                 A->c.s1.z,
+                 A->c.s2.x,
+                 A->c.s2.y,
+                 A->c.s2.z);
+          break ;
+
+        case COMPLEXE : 
+          break ;
+
+        default : printf("Ouaalalalla\n"); 
+          break ;
+    }
+  
+    /* Affichage des fils*/
+    for(int y = 0; y < K; y++){
+      traceKarbre3D(A->fils[y]);
+    }
 }
 
 /************************************************************************/
@@ -520,7 +576,7 @@ void animation_bonuses(){
     vec = normalise(vec);
     //affichePoint(bonuses[i].centre);
     // affichePoint(pvec);
-    afficheVecteur(vec);
+    //afficheVecteur(vec);
     bonuses[i] = rotation_bonus_vec(bonuses[i],angleBonus,vec);
   }
   angleBonus += 0.0001;
@@ -633,22 +689,28 @@ void affichage(){
             upEye.d[0],
             upEye.d[1],
             upEye.d[2]);
-  
-  trace_Plateformes();
-  trace_Escaliers();
-  trace_Origine();
-  trace_Maisons();
-  trace_Bonuses();
-  trace_Arbres();
-  trace_Joueur(jou);
-  trace_Etoiles();
+
+  if(montrerArbre){
+    traceKarbre3D(totalKArbre);
+  }
+  else{
+    trace_Plateformes();
+    trace_Escaliers();
+    trace_Origine();
+    trace_Maisons();
+    trace_Bonuses();
+    trace_Arbres();
+    trace_Joueur(jou);
+    trace_Etoiles();
 
 
-  if(montrerCollision){
-    for(int i = 0; i<nbTabCollisions; i++){
-      trace_Collision(tabCollisions[i][0], tabCollisions[i][1]);
+    if(montrerCollision){
+      for(int i = 0; i<nbTabCollisions; i++){
+        trace_Collision(tabCollisions[i][0], tabCollisions[i][1]);
+      }
     }
   }
+
 
 
   glutSwapBuffers();
@@ -687,6 +749,18 @@ void gererClavier(unsigned char touche, int x, int y){
     case 'c':
       if(montrerCollision) montrerCollision = 0;
       else montrerCollision = 1;
+      break;
+    case 'k':
+      if(montrerArbre){
+        montrerArbre = 0;
+        posEye = retenirPosEye;
+      }
+      else {
+        montrerArbre = 1;
+        retenirPosEye = posEye;
+        posEye = initialiserPointDeFloat(-200,1100,-200);
+      }
+      break;
   }
 }
 

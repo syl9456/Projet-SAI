@@ -19,13 +19,8 @@
 #define COMPLEXE 8
 
 typedef struct sommet{
-  int x,y,z;
+  float x,y,z;
 }sommet;
-
-typedef struct boule{
-  sommet p;
-  int r;
-}boule;
 
 typedef struct cube{
   sommet s1;

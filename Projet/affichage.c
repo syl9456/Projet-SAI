@@ -33,6 +33,55 @@ void trace_Boule(boule bou, couleur c){
 }
 
 
+void traceCube(int x1, int y1, int z1, int x2, int y2, int z2){
+  glBegin(GL_QUADS);
+  glColor3f(1,1,1);
+  //face bas
+  glVertex3f(x1,y1,z2);
+  glVertex3f(x2,y1,z2);
+  glVertex3f(x2,y2,z1);
+  glVertex3f(x1,y1,z1);
+
+  glColor3f(0.9,0.9,0.9);
+  //face dessus
+  glVertex3f(x1,y2,z2);
+  glVertex3f(x2,y2,z2);
+  glVertex3f(x2,y2,z1);
+  glVertex3f(x1,y2,z1);
+
+  //cotés
+  glColor3f(0.8,0.8,0.8);
+  //1
+  glVertex3f(x1,y2,z2);
+  glVertex3f(x2,y2,z2);
+  glVertex3f(x2,y1,z2);
+  glVertex3f(x1,y1,z2);
+
+  glColor3f(0.7,0.7,0.7);
+  //2
+  glVertex3f(x2,y1,z2);
+  glVertex3f(x2,y2,z2);
+  glVertex3f(x2,y2,z1);
+  glVertex3f(x2,y1,z1);
+
+  glColor3f(0.6,0.6,0.6);
+  //3
+  glVertex3f(x1,y1,z1);
+  glVertex3f(x2,y1,z1);
+  glVertex3f(x2,y2,z1);
+  glVertex3f(x1,y2,z1);
+  
+  glColor3f(0.5,0.5,0.5);
+  //3
+  glVertex3f(x1,y2,z2);
+  glVertex3f(x1,y1,z2);
+  glVertex3f(x1,y1,z1);
+  glVertex3f(x1,y2,z1);
+
+
+  glEnd();
+}
+
 
 
 //Trace la plateforme sur la fenetre
@@ -240,7 +289,7 @@ void trace_Escalier(escalier e){
 	int nbMarche = (e.hautD.d[1] - e.basG.d[1])/e.hMarche;
 	// La derniere marche peut ne pas etre de la meme taille
 	float hDerMarche = (int)(e.hautD.d[1] - e.basG.d[1])%e.hMarche;
-	printf("\n\n\n%d %f\n", nbMarche, hDerMarche);
+	// printf("\n\n\n%d %f\n", nbMarche, hDerMarche);
 	// profondeur marche
 	float profMarche = (e.hautD.d[2] - e.basG.d[2])/nbMarche;
 
@@ -287,7 +336,6 @@ void trace_Escalier(escalier e){
 		if(marche1.d[2] != marche2.d[2]){
 			trace_praa(marche1,marche2,c);
 		}
-
 	}
-
 }
+
