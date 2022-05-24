@@ -74,12 +74,13 @@ void trace_Joueur(joueur jou){
 	}
 }
 
-void trace_Bonus(bonus bon){
+void trace_Bonus(bonus bon, couleur c){
 	int i;
-	couleur c;
+	/*couleur c;
 	c.r = 1;
 	c.g = 0.42;
 	c.b = 0.61;
+	*/
 
 	for(i = 0; i<(int)(sizeof(bon.plans)/sizeof(bon.plans[0])); i++){
 		//On change la couleur a chaques itérations

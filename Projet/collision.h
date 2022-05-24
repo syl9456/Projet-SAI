@@ -19,6 +19,10 @@ int collisions(point posJoueur, point plusProche, point plusLoin);
 int colEscalier(escalier e, point posJoueur);
 float etatHauteur(escalier e, point posJoueur);
 
+int colPlateforme(plateforme p, point posJoueur);
+
+
+int colBonus(bonus b, point posJoueur);
 
 #endif
 

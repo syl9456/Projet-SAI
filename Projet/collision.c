@@ -201,6 +201,25 @@ int collisions(point posJoueur, point plusProche, point plusLoin){
 }
 
 // Verifie la collision avec un escalier de bas en haut
+int colPlateforme(plateforme p, point posJoueur){
+	float taille = p.centre.d[0] - p.plans[0].point[0].d[0];
+	// Verfie interiorité du cube
+	 if(posJoueur.d[0] >= p.centre.d[0] - taille &&
+	 	posJoueur.d[0] <= p.centre.d[0] + taille &&
+	 	posJoueur.d[1]-11 >= p.centre.d[1] - taille &&
+	 	posJoueur.d[1]-11 <= p.centre.d[1] + taille&&
+	 	posJoueur.d[2] >= p.centre.d[2] - taille &&
+	 	posJoueur.d[2] <= p.centre.d[2] + taille){
+
+	 	// Le joueur est en collision
+	 	return 1;
+	
+	 }
+
+	return 0;
+}
+
+// Verifie la collision avec un escalier de bas en haut
 int colEscalier(escalier e, point posJoueur){
 
 	// Verfie interiorité du cube
@@ -235,4 +254,26 @@ float etatHauteur(escalier e, point posJoueur){
 	return  e.hMarche*(nbMarche-numMarche);
 
 
+}
+
+
+
+// Verifie la collision avec un bonus
+int colBonus(bonus b, point posJoueur){
+	
+	float taille = b.centre.d[0] - b.plans[0].point[0].d[0];
+	// Verfie interiorité du cube
+	 if(posJoueur.d[0] >= b.centre.d[0] - taille &&
+	 	posJoueur.d[0] <= b.centre.d[0] + taille &&
+	 	posJoueur.d[1]-8 >= b.centre.d[1] - taille &&
+	 	posJoueur.d[1]-8 <= b.centre.d[1] + taille&&
+	 	posJoueur.d[2] >= b.centre.d[2] - taille &&
+	 	posJoueur.d[2] <= b.centre.d[2] + taille){
+
+		// Le joueur est en collision
+		return 1;
+	
+	}
+
+	return 0;
 }

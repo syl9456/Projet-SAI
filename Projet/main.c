@@ -11,6 +11,7 @@
 #define nbMaisons 4
 #define nbArbres 30
 #define nbBonus 10
+#define nbEtoiles 100
 #define nbEscaliers 1
 #define nbTabCollisions 250 //+1 pour la base
 
@@ -25,6 +26,11 @@ maison maisons[nbMaisons];
 arbre arbres[nbArbres];
 bonus bonuses[nbBonus];
 escalier escaliers[nbEscaliers];
+bonus etoiles[nbEtoiles];
+
+/* Comtpeur de bonus */
+
+int score = nbBonus;
 
 point tabCollisions[nbTabCollisions][2];
 int compteurPourTab = 0;
@@ -83,6 +89,17 @@ float angleBonus = 0;
 //                      INITIALISATIONS
 
 /************************************************************************/
+
+void afficheScore(int s){
+  printf("\n\n\n+----------------------------------------------+\n");
+  if(s > 0){
+    printf("| Vous n'avez pas reuni tous les bonus %2d/%2d   |\n",nbBonus-s,nbBonus);
+  }
+  else{
+    printf("| Bravo, vous avez reuni tous les %2d bonus !  |\n",nbBonus);
+  }
+  printf("+----------------------------------------------+\n");
+}
 
 void initialiser_Joueur(){
   jou = init_joueur(centre,2);
@@ -251,6 +268,51 @@ void initialiser_Bonuses(plateforme sol){
 }
 
 
+void initialiser_Etoiles(){
+
+  int min,max;
+
+  point p = centre;
+  int x,y,z;
+
+  for(int i = 0; i<(nbEtoiles/2); i++){
+    min = -1000;
+    max = 1000;
+    x = min + rand()%(max-min);
+    min = -1000;
+    max = 1000;
+    y = min + rand()%(max-min);
+    min = 500;
+    max = 1000;
+    z = min + rand()%(max-min);
+
+    p.d[0] = (float)x;
+    p.d[1] = (float)z;
+    p.d[2] = (float)y;
+
+    etoiles[i] = init_bonus(centre, 2);
+    etoiles[i] = translation_bonus(etoiles[i],p);
+  }
+  for(int i = nbEtoiles/2; i<nbEtoiles; i++){
+    min = -1000;
+    max = 1000;
+    x = min + rand()%(max-min);
+    min = -1000;
+    max = 1000;
+    y = min + rand()%(max-min);
+    min = -400;
+    max = -900;
+    z = min + rand()%(max-min);
+
+    p.d[0] = (float)x;
+    p.d[1] = (float)z;
+    p.d[2] = (float)y;
+
+    etoiles[i] = init_bonus(centre, 2);
+    etoiles[i] = translation_bonus(etoiles[i],p);
+  }
+}
+
 
 // void initialiser_Spirale(){
 //   point p;
@@ -317,7 +379,7 @@ void intialiser_Structures(){
   initialiser_Maisons();
   initialiser_Joueur();
   initialiser_Bonuses(plateformes[1]);
-
+  initialiser_Etoiles(plateformes[1]);
 }
 
 
@@ -342,7 +404,20 @@ void trace_Plateformes(){
 
 void trace_Bonuses(){
   for(int i = 0; i<(int)(sizeof(bonuses)/sizeof(bonus)); i++){
-    trace_Bonus(bonuses[i]);
+    couleur cbonus;
+    cbonus.r = 1;
+    cbonus.g = 0.42;
+    cbonus.b = 0.61;
+    trace_Bonus(bonuses[i],cbonus);
+  }
+} 
+void trace_Etoiles(){
+  for(int i = 0; i<nbEtoiles; i++){
+    couleur cEtoiles;
+    cEtoiles.r = 1;
+    cEtoiles.g = 1;
+    cEtoiles.b = 1;
+    trace_Bonus(etoiles[i],cEtoiles);
   }
 } 
 void trace_Arbres(){
@@ -370,6 +445,49 @@ int colTabCollisions(point posJoueur){
     }
   }
   return 0;
+}
+
+
+// Collision avec le sol
+int colSol(point posJoueur){
+
+  //Iterateur
+  int i;
+
+  // Placement aux pieds du joueurs
+  // Juste sous la voute plantaire
+  for(i=0; i<nbPlateformes; i++){
+    if(colPlateforme(plateformes[i],posJoueur)){
+      return 1;
+    }
+  }
+  for(i=0; i<nbEscaliers; i++){
+    if(colEscalier(escaliers[i],posJoueur)){
+      return 1;
+    }
+  }
+
+  return 0;
+}
+
+// Collision avec un des bonus
+void colTabBonus(point posJoueur){
+
+  //Iterateur
+  int i;
+
+  // Placement aux pieds du joueurs
+  // Juste sous la voute plantaire
+  for(i=0; i<nbBonus;i++){
+    if(colBonus(bonuses[i],posJoueur)){
+      bonuses[i] = bonusVide();
+      score--;
+      if(score <= 0){
+        afficheScore(score);
+        exit(0);
+      }
+    }
+  }
 }
 
 
@@ -409,12 +527,48 @@ void animation_bonuses(){
   if(angleBonus >= 360) angleBonus = 0;
 }
 
+void animation_Etoiles(){
+    for(int i = 0; i<nbEtoiles; i++){
+      if(i%3 == 0){
+        etoiles[i] = rotation_bonus(etoiles[i],'x',0.0002);
+      }
+      if(i%3 == 1){
+        etoiles[i] = rotation_bonus(etoiles[i],'z',0.0002);
+      }
+      if(i%3 == 2){
+        etoiles[i] = rotation_bonus(etoiles[i],'x',0.0003);
+        etoiles[i] = rotation_bonus(etoiles[i],'z',0.0003);
+      }
+  }
+}
 
+/*
+void animation_Etoiles(){
+  //point pvec;
+  vecteur vec;
+  for(int i = 0; i<nbEtoiles; i++){
+    // pvec = bonuses[i].centre;
+    // vec = normalise(vecAvec2points(pvec,bonuses[i].centre));
+    vec.d[0] = etoiles[i].centre.d[0];
+    vec.d[1] = etoiles[i].centre.d[1]+2;
+    vec.d[2] = etoiles[i].centre.d[2];
+
+    vec = normalise(vec);
+    //affichePoint(bonuses[i].centre);
+    // affichePoint(pvec);
+    afficheVecteur(vec);
+    etoiles[i] = rotation_bonus_vec(etoiles[i],angleBonus,vec);
+  }
+  angleEtoiles += 0.0001;
+  if(angleEtoiles>= 360) angleBonus = 0;
+}
+*/
 
 
 //Fonction pour raffraichir la fenetre (encore rien fait de plus que le tp)
 void animer(){
   animation_bonuses();
+  animation_Etoiles();
   calculeOrtho();
 
   float x,y,z;
@@ -434,7 +588,9 @@ void animer(){
     z += cotes * vitesseCamera *  orthoDirEye.d[2];
   }
 
-  if(colTabCollisions(initialiserPointDeFloat(x,y,z))==0){
+
+  if(colTabCollisions(initialiserPointDeFloat(x,y,z))==0 &&
+    colSol(initialiserPointDeFloat(x,y,z)) == 1){
     posEye.d[0] = x;
     posEye.d[1] = y;
     posEye.d[2] = z;
@@ -445,9 +601,14 @@ void animer(){
     posEye.d[1] += 10;
   }
 
+  colTabBonus(posEye);
+
+
   if(avant || cotes){
     jou = translation_joueur(jou,posEye);
   }
+
+
 
   glutPostRedisplay();
 }
@@ -480,6 +641,7 @@ void affichage(){
   trace_Bonuses();
   trace_Arbres();
   trace_Joueur(jou);
+  trace_Etoiles();
 
 
   if(montrerCollision){
@@ -507,6 +669,7 @@ void affichage(){
 void gererClavier(unsigned char touche, int x, int y){
   switch(touche){
     case 27: //Touche echap
+    afficheScore(score);
       exit(0);
       break;
     case 'z':
@@ -617,7 +780,7 @@ int main(int argc, char *argv[]){
 
   srand(getpid());
 
-  posEye = initialiserPointDeFloat(0,10,0);
+  posEye = initialiserPointDeFloat(10,10,10);
   dirEye = initialiserVecteurDeFloat(1,0,0);
   orthoDirEye = initialiserVecteurDeFloat(0,0,0);
   upEye = initialiserVecteurDeFloat(0,1,0);

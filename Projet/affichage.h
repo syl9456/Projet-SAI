@@ -11,6 +11,9 @@ void trace_Joueur(joueur jou);
 void trace_Maison(maison maison);
 void trace_Origine();
 void trace_Collision(point p1, point p2);
+void trace_Bonus(bonus bon, couleur c);
+
+void trace_Arbre(arbre ab);
 
 void trace_praa(point p1, point p2, couleur c);
 void trace_Escalier(escalier e);

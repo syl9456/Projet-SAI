@@ -363,6 +363,23 @@ arbre init_arbre(point c, float taille){
 }
 
 
+bonus bonusVide(){
+	int i,j;
+
+	bonus bon;
+	bon.centre.d[0] = 0;
+	bon.centre.d[1] = 0;
+	bon.centre.d[2] = 0;
+	for(i=0;i<6;i++){
+		for(j=0;j<3;j++){
+			bon.plans[i].point[j].d[0] = 0; 
+			bon.plans[i].point[j].d[1] = 0;
+			bon.plans[i].point[j].d[2] = 0;
+		}
+	}
+
+	return bon;
+}
 
 bonus init_bonus(point c, float taille){
 	bonus bon;
